@@ -1,0 +1,3785 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScriPapelería | Marketplace de papelería profesional</title>
+  <link rel="icon" type="image/jpeg" href="logo-circle.jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f8ff;
+      --surface: #ffffff;
+      --surface-strong: #e8f0ff;
+      --surface-soft: #f8fbff;
+      --border: rgba(34, 91, 231, 0.12);
+      --primary: #1d4ed8;
+      --primary-dark: #112d6c;
+      --primary-soft: #dbe8ff;
+      --secondary: #0ea5e9;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 18px 60px rgba(15, 23, 42, 0.08);
+      font-family: 'Inter', sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #eef5ff 0%, #f8fbff 100%);
+      color: var(--text);
+      font-family: var(--font-family, 'Inter', sans-serif);
+    }
+
+    img { max-width: 100%; display: block; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .app {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 18px 48px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 10px 0 0;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .topbar strong { color: var(--primary-dark); }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(22px);
+      border-bottom: 1px solid rgba(29,78,216,0.08);
+      transition: all 0.28s ease;
+    }
+
+    .header.shrink {
+      padding-top: 6px;
+      padding-bottom: 4px;
+      background: rgba(255,255,255,0.98);
+      box-shadow: 0 10px 35px rgba(15,23,42,0.05);
+    }
+
+    .header.shrink .header-row {
+      padding: 10px 0;
+    }
+
+    .header.shrink .brand {
+      padding: 6px 10px;
+    }
+
+    .header.shrink .brand img {
+      height: 48px;
+    }
+
+    .header.shrink .brand-title {
+      font-size: 16px;
+    }
+
+    .header-row {
+      display: grid;
+      grid-template-columns: minmax(180px, 300px) 1fr auto;
+      align-items: center;
+      gap: 18px;
+      padding: 22px 0;
+      transition: padding 0.28s ease;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 8px 12px;
+      border-radius: 20px;
+      transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .brand:hover {
+      transform: translateY(-1px);
+      background: rgba(29,78,216,0.04);
+    }
+
+    .brand img {
+      height: 60px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .brand:hover {
+      transform: translateY(-1px);
+      background: rgba(29,78,216,0.06);
+      box-shadow: 0 14px 40px rgba(29,78,216,0.08);
+    }
+
+    .brand-title {
+      display: block;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--primary-dark);
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.96);
+      border: 1px solid rgba(29,78,216,0.12);
+      transition: box-shadow 0.28s ease, transform 0.28s ease;
+    }
+
+    .search-bar input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 16px;
+      padding: 0;
+    }
+
+    .search-bar button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 14px;
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 12px 28px rgba(29,78,216,0.12);
+    }
+
+    .search-bar button:hover { transform: translateY(-1px); background: #143b88; }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .action-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-width: 44px;
+      min-height: 44px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+      text-decoration: none;
+    }
+
+    .action-pill:hover { transform: translateY(-1px); border-color: rgba(29,78,216,0.24); background: rgba(235,248,255,0.92); color: var(--text); }
+    .action-pill svg { width: 20px; height: 20px; fill: currentColor; }
+    .action-pill.icon-only { padding: 10px; min-width: 46px; }
+    .action-pill .pill-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 18px;
+      min-height: 18px;
+      padding: 0 6px;
+      border-radius: 999px;
+      background: var(--primary);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .nav-categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 18px 0 20px;
+      border-top: 1px solid rgba(29,78,216,0.08);
+    }
+
+    .nav-category {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(29,78,216,0.12);
+      background: rgba(235,245,255,0.82);
+      color: var(--primary-dark);
+      font-size: 14px;
+      text-decoration: none;
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .nav-category:hover {
+      transform: translateY(-1px);
+      background: rgba(29,78,216,0.12);
+      box-shadow: 0 12px 28px rgba(15,23,42,0.06);
+    }
+
+    main section {
+      display: none;
+      padding: 30px 0;
+    }
+
+    main section.active { display: block; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr minmax(280px, 420px);
+      gap: 32px;
+      align-items: center;
+      padding: 58px 0 40px;
+      min-height: 540px;
+    }
+
+    .hero-copy {
+      max-width: 620px;
+    }
+
+    .eyebadge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(14,165,233,0.12);
+      color: var(--secondary);
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .hero-copy h1 {
+      font-size: clamp(2.4rem, 4vw, 3.6rem);
+      line-height: 1.02;
+      margin: 0 0 18px;
+      letter-spacing: -0.04em;
+      max-width: 48rem;
+    }
+
+    .hero-copy p {
+      margin: 0 0 24px;
+      max-width: 520px;
+      line-height: 1.75;
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+    .hero-actions .btn-primary,
+    .hero-actions .btn-secondary {
+      padding: 16px 24px;
+      border-radius: 16px;
+      border: none;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 16px 32px rgba(29,78,216,0.14);
+    }
+
+    .btn-secondary {
+      background: rgba(235,248,255,0.9);
+      color: var(--primary-dark);
+      border: 1px solid rgba(29,78,216,0.14);
+    }
+
+    .hero-actions .btn-primary:hover,
+    .hero-actions .btn-secondary:hover { transform: translateY(-2px); }
+
+    .hero-image {
+      position: relative;
+      border-radius: 32px;
+      background: linear-gradient(180deg, rgba(235,248,255,0.9), rgba(255,255,255,0.96));
+      box-shadow: 0 26px 70px rgba(15,23,42,0.08);
+      overflow: hidden;
+      min-height: 420px;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hero-image:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 32px 88px rgba(15,23,42,0.14);
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 25px 45px rgba(29,78,216,0.18));
+    }
+
+    .grid-4 {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: 26px;
+      border: 1px solid rgba(15,23,42,0.06);
+      box-shadow: 0 20px 40px rgba(15,23,42,0.04);
+      overflow: hidden;
+      transition: transform 0.24s ease, box-shadow 0.24s ease;
+    }
+
+    .card:hover { transform: translateY(-4px); box-shadow: 0 26px 60px rgba(15,23,42,0.08); }
+
+    .card-body {
+      padding: 22px;
+    }
+
+    .card-title { font-size: 1.15rem; margin: 0 0 10px; }
+    .card-text { margin: 0; color: var(--text-muted); line-height: 1.6; }
+
+    .category-card {
+      display: grid;
+      gap: 16px;
+      border-radius: 24px;
+      padding: 24px;
+      background: linear-gradient(180deg, rgba(14,165,233,0.08), #ffffff);
+      min-height: 180px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .category-card::after {
+      content: '';
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(29,78,216,0.1);
+      right: -32px;
+      bottom: -24px;
+    }
+
+    .small-category-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .small-category-card {
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      border-radius: 24px;
+      background: var(--surface);
+      border: 1px solid rgba(29,78,216,0.08);
+      box-shadow: 0 18px 32px rgba(15,23,42,0.05);
+      min-height: 170px;
+      text-align: center;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+
+    .small-category-card h3 {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.4;
+      color: var(--primary-dark);
+    }
+
+    .small-category-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 24px 40px rgba(15,23,42,0.08);
+      border-color: rgba(29,78,216,0.18);
+    }
+
+    .small-icon {
+      display: inline-flex;
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      background: rgba(14,165,233,0.12);
+      align-items: center;
+      justify-content: center;
+      font-size: 1.45rem;
+      margin-bottom: 14px;
+    }
+
+    .category-card h3 { margin: 0; font-size: 1.1rem; font-weight: 700; }
+    .category-card p { margin: 0; color: var(--text-muted); }
+    .category-card button {
+      margin-top: auto;
+      align-self: start;
+      border: none;
+      border-radius: 999px;
+      background: var(--primary);
+      color: white;
+      padding: 12px 18px;
+      font-weight: 700;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 18px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .section-header h2 { margin: 0; font-size: 1.65rem; }
+    .section-header p { margin: 0; color: var(--text-muted); }
+    .section-header .view-all {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(29,78,216,0.08);
+      color: var(--primary-dark);
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+    }
+
+    .section-header .view-all:hover {
+      transform: translateY(-1px);
+      background: rgba(29,78,216,0.16);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(29,78,216,0.08);
+      color: var(--primary-dark);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .catalog-actions {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .filters-bar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .filters-bar select,
+    .filters-bar input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      color: var(--text);
+      padding: 12px 14px;
+      outline: none;
+    }
+
+    .product-grid {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      border-radius: 28px;
+      border: 1px solid rgba(15,23,42,0.05);
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.38s ease forwards;
+    }
+
+    .product-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 24px 50px rgba(15,23,42,0.08);
+    }
+
+    .product-card .product-image {
+      position: relative;
+      min-height: 220px;
+      background: rgba(235,248,255,0.86);
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
+
+    .product-card .product-image img {
+      max-width: 100%;
+      max-height: 220px;
+      object-fit: contain;
+    }
+
+    .product-card .product-content {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .product-card h3 { margin: 0; font-size: 1.05rem; }
+    .product-card .product-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+
+    .product-card .rating {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #f59e0b;
+      font-weight: 600;
+    }
+
+    .product-card .price-group {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .product-card .price {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .product-card .old-price { text-decoration: line-through; color: var(--text-muted); font-size: 0.95rem; }
+    .product-card .discount {
+      color: var(--success);
+      font-size: 0.93rem;
+      font-weight: 700;
+    }
+
+    .product-card .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      background: #fef3c7;
+      color: #b45309;
+      width: fit-content;
+    }
+
+    .product-card .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .product-card button {
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: none;
+      font-weight: 700;
+      transition: transform 0.18s ease;
+    }
+
+    .product-card button:hover { transform: translateY(-1px); }
+    .btn-secondary-outline {
+      background: #f8fbff;
+      border: 1px solid var(--border);
+      color: var(--primary-dark);
+    }
+
+    .btn-primary-solid {
+      background: var(--primary);
+      color: white;
+    }
+
+    .product-card .favorite {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(15,23,42,0.08);
+      background: rgba(255,255,255,0.94);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .product-card .favorite:hover { transform: translateY(-2px); background: white; box-shadow: 0 10px 24px rgba(15,23,42,0.1); }
+    .product-card .favorite.active { color: var(--danger); }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    main section {
+      display: none;
+      padding: 30px 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    main section.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-primary-solid,
+    .btn-secondary-outline {
+      transition: transform 0.18s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .breadcrumb span,
+    .breadcrumb button {
+      color: inherit;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      font: inherit;
+    }
+
+    .breadcrumb span:hover,
+    .breadcrumb button:hover { text-decoration: underline; }
+
+    .product-detail {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 26px;
+      align-items: start;
+    }
+
+    .detail-gallery {
+      display: grid;
+      gap: 18px;
+    }
+
+    .detail-gallery .main-image {
+      border-radius: 28px;
+      overflow: hidden;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      min-height: 420px;
+      display: grid;
+      place-items: center;
+    }
+
+    .detail-gallery .main-image img { width: 100%; height: auto; }
+
+    .thumb-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .thumb-grid button {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--surface);
+      padding: 10px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .thumb-grid button.active { border-color: var(--primary); }
+    .thumb-grid button:hover { transform: translateY(-2px); }
+    .thumb-grid img { width: 100%; border-radius: 14px; display: block; }
+
+    .detail-info {
+      display: grid;
+      gap: 18px;
+    }
+
+    .detail-info h1 { margin: 0; font-size: 2rem; }
+    .detail-info .detail-meta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      color: var(--text-muted);
+      font-size: 0.98rem;
+    }
+
+    .detail-info .detail-meta strong { color: var(--primary-dark); }
+    .detail-info .detail-price {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .detail-info .detail-price .price {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .detail-info .detail-price .offer {
+      display: grid;
+      gap: 6px;
+      color: var(--text-muted);
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 0;
+    }
+
+    .tag-list span {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: var(--primary-dark);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .detail-actions {
+      display: grid;
+      gap: 14px;
+    }
+
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      max-width: 240px;
+    }
+
+    .quantity-control button {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 18px;
+    }
+
+    .quantity-control input {
+      width: 72px;
+      text-align: center;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px;
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .detail-actions button {
+      padding: 16px 20px;
+      border-radius: 16px;
+      border: none;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: transform 0.2s ease;
+    }
+
+    .detail-actions button:hover { transform: translateY(-1px); }
+
+    .detail-actions .btn-outline {
+      background: var(--surface);
+      color: var(--primary-dark);
+      border: 1px solid var(--border);
+    }
+
+    .detail-summary {
+      display: grid;
+      gap: 18px;
+      padding: 22px;
+      border-radius: 24px;
+      background: var(--surface-soft);
+      border: 1px solid rgba(14,165,233,0.16);
+    }
+
+    .detail-summary li {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--text-muted);
+    }
+
+    .detail-summary li strong { color: var(--text); }
+
+    .tabs {
+      display: grid;
+      gap: 18px;
+      margin-top: 26px;
+    }
+
+    .tabs button {
+      width: 100%;
+      text-align: left;
+      padding: 18px 20px;
+      border-radius: 22px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+    }
+
+    .tabs button.active {
+      border-color: rgba(29,78,216,0.24);
+      background: rgba(219,232,255,0.65);
+    }
+
+    .tab-panel {
+      padding: 18px 20px;
+      border-radius: 20px;
+      background: var(--surface-soft);
+      border: 1px solid rgba(15,23,42,0.04);
+    }
+
+    .tab-panel p,
+    .tab-panel ul {
+      margin: 0;
+      line-height: 1.75;
+      color: var(--text-muted);
+    }
+
+    .tab-panel ul { padding-left: 18px; }
+
+    .product-listing {
+      margin-top: 28px;
+    }
+
+    .tiles-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .product-full-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: center;
+      padding: 22px;
+      border-radius: 24px;
+      background: var(--surface);
+      border: 1px solid rgba(15,23,42,0.06);
+    }
+
+    .summary-card {
+      padding: 26px;
+      border-radius: 28px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(15,23,42,0.06);
+    }
+
+    .summary-card h3 { margin-top: 0; }
+    .summary-card .summary-line {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      color: var(--text-muted);
+    }
+
+    .summary-card .summary-line strong { color: var(--text); }
+    .summary-card .summary-total {
+      font-size: 1.45rem;
+      font-weight: 800;
+      margin-top: 16px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .summary-card button {
+      width: 100%;
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 100px 1fr auto;
+      gap: 18px;
+      padding: 22px;
+      border-radius: 24px;
+      background: var(--surface);
+      border: 1px solid rgba(15,23,42,0.06);
+    }
+
+    .cart-item img { width: 100%; border-radius: 18px; object-fit: cover; }
+
+    .cart-item .cart-content {
+      display: grid;
+      gap: 10px;
+    }
+
+    .cart-item h4 { margin: 0; }
+    .cart-item small { color: var(--text-muted); }
+
+    .cart-item .cart-actions {
+      display: grid;
+      gap: 12px;
+      text-align: right;
+    }
+
+    .cart-remove {
+      background: none;
+      border: none;
+      color: var(--danger);
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .stepper {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .stepper .step {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .stepper .step.active {
+      background: rgba(29,78,216,0.1);
+      border-color: rgba(29,78,216,0.2);
+      color: var(--primary-dark);
+      font-weight: 700;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .form-grid input,
+    .form-grid select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 16px;
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+    }
+
+    textarea { min-height: 140px; resize: vertical; }
+    .form-grid .full { grid-column: 1 / -1; }
+
+    .panel {
+      display: grid;
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .panel-card {
+      padding: 24px;
+      border-radius: 28px;
+      background: var(--surface);
+      border: 1px solid rgba(15,23,42,0.06);
+      box-shadow: var(--shadow);
+    }
+
+    .panel-card h3 { margin-top: 0; }
+    .stats-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .stats-card {
+      padding: 20px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(29,78,216,0.08), #ffffff);
+      border: 1px solid rgba(29,78,216,0.16);
+    }
+
+    .stats-card span { display: block; margin-bottom: 8px; color: var(--text-muted); }
+    .stats-card strong { font-size: 1.45rem; color: var(--primary-dark); }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 740px;
+    }
+
+    th, td {
+      padding: 14px 18px;
+      text-align: left;
+      border-bottom: 1px solid rgba(15,23,42,0.07);
+      vertical-align: middle;
+    }
+
+    th { color: var(--text-muted); font-size: 0.95rem; }
+    td strong { color: var(--text); }
+
+    .status-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .status-received { background: #0ea5e9; }
+    .status-preparing { background: #f59e0b; }
+    .status-shipped { background: #2563eb; }
+    .status-delivered { background: #16a34a; }
+
+    .section-panel {
+      display: grid;
+      gap: 20px;
+    }
+
+    .profile-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: start;
+      padding: 26px;
+      border-radius: 28px;
+      background: var(--surface);
+      border: 1px solid rgba(15,23,42,0.06);
+    }
+
+    .profile-avatar {
+      width: 88px;
+      height: 88px;
+      border-radius: 24px;
+      background: rgba(14,165,233,0.12);
+      display: grid;
+      place-items: center;
+      font-size: 2rem;
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    .profile-details h3 { margin: 0 0 8px; }
+    .profile-details p { margin: 0; color: var(--text-muted); }
+
+    .profile-menu {
+      display: grid;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .profile-menu button {
+      text-align: left;
+      padding: 14px 18px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .profile-menu button.active { background: rgba(29,78,216,0.1); border-color: rgba(29,78,216,0.2); }
+
+    .order-card {
+      padding: 22px;
+      border-radius: 24px;
+      background: var(--surface);
+      border: 1px solid rgba(15,23,42,0.06);
+      display: grid;
+      gap: 12px;
+    }
+
+    .order-card header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .order-card h4 { margin: 0; font-size: 1.05rem; }
+    .order-card p { margin: 0; color: var(--text-muted); }
+
+    .favorite-grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .favorite-card {
+      position: relative;
+      padding: 18px;
+      border-radius: 26px;
+      background: var(--surface);
+      border: 1px solid rgba(15,23,42,0.06);
+      display: grid;
+      gap: 14px;
+    }
+
+    .favorite-card img {
+      width: 100%;
+      aspect-ratio: 1.2 / 1;
+      object-fit: contain;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(14,165,233,0.12), transparent);
+    }
+
+    .favorite-card button {
+      border: none;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 700;
+    }
+
+    .favorite-card .fav-remove {
+      background: #f8fafc;
+      color: var(--danger);
+    }
+
+    .favorite-card .fav-add {
+      background: var(--primary);
+      color: white;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .contact-panel {
+      padding: 28px;
+      border-radius: 28px;
+      background: var(--surface);
+      border: 1px solid rgba(15,23,42,0.06);
+      display: grid;
+      gap: 16px;
+    }
+
+    .contact-panel h2 { margin: 0; }
+    .contact-panel p { color: var(--text-muted); line-height: 1.8; }
+    .contact-buttons {
+      display: grid;
+      gap: 12px;
+    }
+
+    .contact-buttons a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 18px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .contact-buttons a:hover { background: #f8fbff; }
+
+    .footer {
+      margin-top: 38px;
+      padding: 38px 0 24px;
+      border-top: 1px solid rgba(15,23,42,0.08);
+    }
+
+    .footer-grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .footer-brand {
+      display: grid;
+      gap: 16px;
+    }
+
+    .footer-brand img { width: 160px; }
+
+    .footer-section h4 { margin-bottom: 12px; }
+    .footer-links {
+      display: grid;
+      gap: 10px;
+    }
+
+    .footer-links a { color: var(--text-muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--primary); }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 24px;
+      z-index: 1000;
+      background: rgba(15,23,42,0.95);
+      color: white;
+      border-radius: 18px;
+      padding: 16px 20px;
+      box-shadow: var(--shadow);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.24s ease, transform 0.24s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast svg { width: 20px; height: 20px; }
+
+    .skeleton-grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .skeleton-card {
+      border-radius: 24px;
+      background: linear-gradient(90deg, #edf2ff 0%, #f8fbff 50%, #edf2ff 100%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s ease infinite;
+      min-height: 360px;
+    }
+
+    @keyframes shimmer {
+      from { background-position: 200% 0; }
+      to { background-position: -200% 0; }
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 1200px) {
+      .hero { grid-template-columns: 1fr; }
+      .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .tiles-3 { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .contact-grid { grid-template-columns: 1fr; }
+      .cart-item { grid-template-columns: 1fr; }
+      .product-full-card { grid-template-columns: 1fr; }
+      .profile-card { grid-template-columns: 1fr; }
+      .stepper { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 900px) {
+      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .category-card { min-height: auto; }
+      .small-category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .filters-bar { grid-template-columns: 1fr; }
+      .section-header { flex-direction: column; align-items: flex-start; }
+      .header-row { grid-template-columns: 1fr; }
+      .header-actions { justify-content: flex-start; }
+      .topbar { flex-direction: column; align-items: flex-start; }
+      .stepper { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 660px) {
+      .app { padding: 0 14px 24px; }
+      .header-row { grid-template-columns: 1fr; }
+      .header-actions { justify-content: space-between; }
+      .brand { justify-content: flex-start; }
+      .brand img { height: 58px; }
+      .brand-title { font-size: 16px; }
+      .nav-categories { overflow-x: auto; padding-bottom: 12px; }
+      .nav-categories::-webkit-scrollbar { display: none; }
+      .action-pill { padding: 10px 12px; }
+      .search-bar { padding: 12px 14px; }
+      .hero-copy h1 { font-size: 2.4rem; }
+      .hero-actions { flex-direction: column; }
+      .product-card .actions { grid-template-columns: 1fr; }
+      .filters-bar { gap: 10px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .product-grid { grid-template-columns: 1fr; }
+      .small-category-grid { grid-template-columns: 1fr; }
+      .hero { min-height: auto; padding-top: 36px; }
+      .header-actions { width: 100%; justify-content: space-between; }
+    }
+
+    @media (max-width: 480px) {
+      .app { padding: 0 12px 18px; }
+      .topbar {
+        font-size: 11px;
+        line-height: 1.5;
+        gap: 6px;
+        padding-top: 8px;
+      }
+      .topbar strong { display: block; }
+      .header-row { padding: 12px 0; gap: 12px; }
+      .brand { gap: 10px; padding: 6px 8px; }
+      .brand img { height: 42px; }
+      .brand-title { font-size: 14px; }
+      .header-actions { gap: 8px; }
+      .action-pill {
+        min-width: 40px;
+        min-height: 40px;
+        padding: 8px 10px;
+      }
+      .search-bar {
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 14px;
+      }
+      .search-bar input { font-size: 14px; }
+      .search-bar button {
+        padding: 9px 12px;
+        font-size: 0.82rem;
+      }
+      .nav-categories {
+        gap: 8px;
+        padding: 12px 0 14px;
+      }
+      .nav-category {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+      .hero {
+        gap: 18px;
+        padding-top: 18px;
+        min-height: auto;
+      }
+      .hero-copy h1 { font-size: 2rem; }
+      .eyebrow { font-size: 0.7rem; }
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .hero-actions a, .hero-actions button, .cta-row button, .cta-row a {
+        width: 100%;
+        justify-content: center;
+      }
+      .product-card .actions,
+      .cta-row,
+      .panel-actions,
+      .filter-row,
+      .form-grid,
+      .stats-grid,
+      .grid-4,
+      .small-category-grid,
+      .product-grid {
+        grid-template-columns: 1fr !important;
+      }
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .section-header h2 { font-size: 1.7rem; }
+      .section-header p { font-size: 0.95rem; }
+      .product-card .product-content { padding: 14px; }
+      .product-card h3 { font-size: 1rem; }
+      .price-group { gap: 6px; }
+      .cart-item { padding: 12px; }
+      .cart-content h4 { font-size: 1rem; }
+      .contact-panel,
+      .panel-card,
+      .card,
+      .product-card {
+        border-radius: 18px;
+      }
+      button, input, select, textarea {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div>Marketplace colombiano de papelería profesional.</div>
+      <div><strong>Envíos en todo el país</strong> | WhatsApp 317 443 7303</div>
+    </div>
+
+    <header class="header">
+      <div class="header-row">
+        <a class="brand" href="#" onclick="navigateTo('home')">
+          <img src="logo-circle.jpeg" alt="ScriPapelería" />
+          <span class="brand-title">ScriPapelería</span>
+        </a>
+
+        <form class="search-bar" onsubmit="event.preventDefault(); applySearch();">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="rgba(15,23,42,0.6)"><path d="M10 18a8 8 0 1 1 6.32-3.16l4.37 4.37-1.42 1.42-4.37-4.37A7.96 7.96 0 0 1 10 18Zm0-14a6 6 0 1 0 0 12 6 6 0 0 0 0-12Z"></path></svg>
+          <input id="globalSearch" type="search" placeholder="¿Qué estás buscando?" autocomplete="off" />
+          <button type="submit">Buscar</button>
+        </form>
+
+        <div class="header-actions">
+          <button class="action-pill icon-only" title="Cuenta" onclick="navigateTo('login')">
+            <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.33 0-8 2.17-8 5v1h16v-1c0-2.83-3.67-5-8-5Z"></path></svg>
+          </button>
+          <button class="action-pill icon-only" title="Perfil" onclick="navigateTo('profile')">
+            <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.33 0-8 2.17-8 5v1h16v-1c0-2.83-3.67-5-8-5Z"></path></svg>
+          </button>
+          <button class="action-pill icon-only" title="Favoritos" onclick="navigateTo('favorites')">
+            <svg viewBox="0 0 24 24"><path d="M12 20.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 10.54L12 20.35Z"></path></svg>
+            <span class="pill-count" id="favoriteCount">0</span>
+          </button>
+          <button class="action-pill icon-only" title="Carrito" onclick="navigateTo('cart')">
+            <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2ZM7 6h14l-1.25 7H8.25L7 6Zm0-2l1.1 6h12.4a1 1 0 0 1 .97 1.24l-1.5 8.5A1 1 0 0 1 18.25 20H7.5a1 1 0 0 1-.99-.85L4 4H2V2h3Zm3 10h6v2H10v-2Z"></path></svg>
+            <span class="pill-count" id="cartCount">0</span>
+          </button>
+        </div>
+      </div>
+
+      <nav class="nav-categories" aria-label="Categorías principales">
+        <button class="nav-category" onclick="filterByCategory('Cuadernos')">Cuadernos</button>
+        <button class="nav-category" onclick="filterByCategory('Esferos y lapiceros')">Escritura</button>
+        <button class="nav-category" onclick="filterByCategory('Arte y dibujo')">Arte</button>
+        <button class="nav-category" onclick="filterByCategory('Oficina')">Oficina</button>
+        <button class="nav-category" onclick="filterByCategory('Papelería escolar')">Escolar</button>
+        <button class="nav-category" onclick="filterByCategory('Manualidades')">Manualidades</button>
+        <button class="nav-category" onclick="navigateTo('catalog')">Ver todas</button>
+      </nav>
+    </header>
+
+    <main>
+      <section id="home" class="active">
+        <div class="hero">
+          <div class="hero-copy">
+            <span class="eyebadge">ScriPapelería</span>
+            <h1>La papelería en línea que se siente moderna, confiable y creativa.</h1>
+            <p>Explora productos seleccionados para estudiar, crear y organizar tus espacios con estilo premium.</p>
+            <div class="hero-actions">
+              <button class="btn-primary" onclick="navigateTo('catalog')">Explorar productos</button>
+              <button class="btn-secondary" onclick="navigateTo('catalog')">Ver ofertas</button>
+            </div>
+          </div>
+          <div class="hero-image">
+            <img src="logo-horizontal.jpeg" alt="Banner ScriPapelería" />
+          </div>
+        </div>
+
+        <div class="section-header">
+          <div>
+            <h2>Categorías destacadas</h2>
+            <p>Explora las colecciones más buscadas de papelería y útiles.</p>
+          </div>
+          <a class="view-all" onclick="navigateTo('catalog')">Ver todo el catálogo →</a>
+        </div>
+
+        <div class="small-category-grid">
+          <article class="small-category-card" onclick="filterByCategory('Cuadernos')">
+            <div class="small-icon">📘</div>
+            <h3>Cuadernos</h3>
+          </article>
+          <article class="small-category-card" onclick="filterByCategory('Esferos y lapiceros')">
+            <div class="small-icon">✏️</div>
+            <h3>Escritura</h3>
+          </article>
+          <article class="small-category-card" onclick="filterByCategory('Arte y dibujo')">
+            <div class="small-icon">🎨</div>
+            <h3>Arte</h3>
+          </article>
+          <article class="small-category-card" onclick="filterByCategory('Oficina')">
+            <div class="small-icon">📁</div>
+            <h3>Oficina</h3>
+          </article>
+          <article class="small-category-card" onclick="filterByCategory('Papelería escolar')">
+            <div class="small-icon">🎒</div>
+            <h3>Escolar</h3>
+          </article>
+          <article class="small-category-card" onclick="filterByCategory('Manualidades')">
+            <div class="small-icon">🧵</div>
+            <h3>Manualidades</h3>
+          </article>
+        </div>
+        <div style="margin-top: 16px; text-align: right;"><button class="btn-secondary" onclick="navigateTo('catalog')">Ver todas</button></div>
+
+        <div class="section-header" style="margin-top: 52px;">
+          <div>
+            <h2>Productos más buscados</h2>
+            <p>Los artículos con mejor valoración y envíos disponibles hoy.</p>
+          </div>
+          <span class="badge">Selección profesional</span>
+        </div>
+
+        <div id="featuredProducts" class="product-grid"></div>
+
+        <div class="section-header" style="margin-top: 52px;">
+          <div>
+            <h2>Ventajas de comprar en ScriPapelería</h2>
+            <p>Servicio confiable, soporte rápido y stock verificado para estudiantes y profesionales.</p>
+          </div>
+        </div>
+
+        <div class="grid-4">
+          <article class="card">
+            <div class="card-body">
+              <h3>Envío nacional</h3>
+              <p>Despachos seguros en todo el país con seguimiento en tiempo real.</p>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-body">
+              <h3>Pago seguro</h3>
+              <p>Interfaz preparada para pagos colombianos como PSE, Nequi, Daviplata y tarjeta.</p>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-body">
+              <h3>Stock actualizado</h3>
+              <p>Productos clasificados como disponibles, últimas unidades o agotados.</p>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-body">
+              <h3>Atención personalizada</h3>
+              <p>Soporte por WhatsApp y formulario de contacto para resolver pedidos y envíos.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="catalog">
+        <div class="section-header">
+          <div>
+            <h2>Catálogo completo</h2>
+            <p>Busca entre nuestros productos y aplica filtros de categoría, marca y precio.</p>
+          </div>
+          <button class="btn-secondary" onclick="navigateTo('home')">Volver a inicio</button>
+        </div>
+
+        <div class="catalog-actions">
+          <div class="filters-bar">
+            <input id="filterSearch" type="text" placeholder="Buscar por nombre, marca o tipo" oninput="applySearch()" />
+            <select id="filterCategory" onchange="applyFilters()">
+              <option value="">Todas las categorías</option>
+            </select>
+            <select id="filterBrand" onchange="applyFilters()">
+              <option value="">Todas las marcas</option>
+            </select>
+            <select id="filterOrder" onchange="applyFilters()">
+              <option value="recomendados">Recomendados</option>
+              <option value="masVendidos">Más vendidos</option>
+              <option value="precioAsc">Precio menor a mayor</option>
+              <option value="precioDesc">Precio mayor a menor</option>
+              <option value="mejorCalificados">Mejor calificados</option>
+              <option value="recientes">Más recientes</option>
+            </select>
+          </div>
+          <div class="filters-bar">
+            <input id="filterMinPrice" type="number" min="0" placeholder="Precio mínimo" onchange="applyFilters()" />
+            <input id="filterMaxPrice" type="number" min="0" placeholder="Precio máximo" onchange="applyFilters()" />
+            <select id="filterRating" onchange="applyFilters()">
+              <option value="">Todas las calificaciones</option>
+              <option value="4">4 estrellas o más</option>
+              <option value="3">3 estrellas o más</option>
+            </select>
+            <select id="filterStock" onchange="applyFilters()">
+              <option value="">Disponibilidad</option>
+              <option value="available">Con stock</option>
+              <option value="lastUnits">Últimas unidades</option>
+              <option value="out">Agotados</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="catalogGrid" class="product-grid"></div>
+      </section>
+
+      <section id="productPage">
+        <div class="breadcrumb" id="productBreadcrumb"></div>
+        <div class="product-detail">
+          <div class="detail-gallery">
+            <div class="main-image"><img id="detailMainImage" src="" alt="Imagen del producto" /></div>
+            <div class="thumb-grid" id="detailThumbs"></div>
+          </div>
+          <div class="detail-info">
+            <div>
+              <div class="detail-meta"><strong id="detailBrand"></strong><span id="detailRating"></span><span id="detailReviews"></span></div>
+              <h1 id="detailName"></h1>
+            </div>
+            <div class="detail-price">
+              <div class="price" id="detailPrice"></div>
+              <div class="offer"><span id="detailOldPrice"></span><span id="detailDiscount"></span></div>
+            </div>
+            <div class="tag-list" id="detailTags"></div>
+            <p id="detailAvailability"></p>
+            <div class="detail-actions">
+              <div class="quantity-control">
+                <button type="button" onclick="changeDetailQuantity(-1)">-</button>
+                <input id="detailQuantity" type="number" min="1" value="1" />
+                <button type="button" onclick="changeDetailQuantity(1)">+</button>
+              </div>
+              <div style="display:flex; gap:12px; flex-wrap: wrap;">
+                <button class="btn-primary-solid" onclick="addToCart(detailProduct.id, Number(detailQuantity.value))">Agregar al carrito</button>
+                <button class="btn-outline" onclick="addToFavorites(detailProduct.id)">Guardar favorito</button>
+              </div>
+            </div>
+            <div class="detail-summary">
+              <li><span>Marca</span><strong id="detailSummaryBrand"></strong></li>
+              <li><span>Categoría</span><strong id="detailSummaryCategory"></strong></li>
+              <li><span>Stock disponible</span><strong id="detailSummaryStock"></strong></li>
+              <li><span>Últimas unidades</span><strong id="detailSummaryStatus"></strong></li>
+            </div>
+          </div>
+        </div>
+
+        <div class="tabs">
+          <button class="tab-button active" data-tab="descripcion">Descripción del producto</button>
+          <button class="tab-button" data-tab="caracteristicas">Características</button>
+          <button class="tab-button" data-tab="especificaciones">Especificaciones</button>
+          <button class="tab-button" data-tab="opiniones">Opiniones de clientes</button>
+        </div>
+        <div class="tab-panel" id="detailTabContent"></div>
+
+        <div class="section-header" style="margin-top: 42px;">
+          <div><h2>También te puede interesar</h2><p>Productos relacionados para completar tu compra.</p></div>
+        </div>
+        <div id="relatedProducts" class="product-grid"></div>
+      </section>
+
+      <section id="cart">
+        <div class="section-header">
+          <div><h2>Carrito de compras</h2><p>Revisa tus productos antes de continuar con la compra.</p></div>
+          <button class="btn-secondary" onclick="navigateTo('catalog')">Seguir comprando</button>
+        </div>
+        <div id="cartList"></div>
+        <div class="summary-card">
+          <h3>Resumen de compra</h3>
+          <div class="summary-line"><span>Subtotal</span><strong id="cartSubtotal">$0</strong></div>
+          <div class="summary-line"><span>Descuentos</span><strong id="cartDiscount">-$0</strong></div>
+          <div class="summary-line"><span>Envío</span><strong id="cartShipping">$12.000</strong></div>
+          <div class="summary-total"><span>Total</span><strong id="cartTotal">$0</strong></div>
+          <button onclick="navigateTo('checkout')">Continuar compra</button>
+        </div>
+      </section>
+
+      <section id="checkout">
+        <div class="section-header">
+          <div><h2>Checkout</h2><p>Completa tu compra en cuatro pasos.</p></div>
+          <button class="btn-secondary" onclick="navigateTo('cart')">Volver al carrito</button>
+        </div>
+
+        <div class="stepper">
+          <div class="step" id="stepIndicator1">1. Datos personales</div>
+          <div class="step" id="stepIndicator2">2. Dirección</div>
+          <div class="step" id="stepIndicator3">3. Pago</div>
+          <div class="step" id="stepIndicator4">4. Confirmación</div>
+        </div>
+
+        <div id="checkoutStep1" class="panel">
+          <div class="panel-card">
+            <h3>Información personal</h3>
+            <div class="form-grid">
+              <input id="checkoutName" type="text" placeholder="Nombre" />
+              <input id="checkoutLastName" type="text" placeholder="Apellido" />
+              <input id="checkoutEmail" type="email" placeholder="Correo electrónico" />
+              <input id="checkoutPhone" type="tel" placeholder="Teléfono" />
+            </div>
+            <button onclick="goCheckoutStep(2)">Continuar</button>
+          </div>
+        </div>
+
+        <div id="checkoutStep2" class="panel hidden">
+          <div class="panel-card">
+            <h3>Dirección de entrega</h3>
+            <div class="form-grid">
+              <select id="checkoutDepartment"><option value="">Departamento</option><option>Antioquia</option><option>Cundinamarca</option><option>Valle del Cauca</option><option>Bogotá D.C.</option></select>
+              <input id="checkoutCity" type="text" placeholder="Ciudad" />
+              <input id="checkoutAddress" type="text" placeholder="Dirección" />
+              <input id="checkoutAddress2" type="text" placeholder="Información adicional" />
+            </div>
+            <button onclick="goCheckoutStep(3)">Continuar</button>
+          </div>
+        </div>
+
+        <div id="checkoutStep3" class="panel hidden">
+          <div class="panel-card">
+            <h3>Datos de pago y cuenta bancaria</h3>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Elige el método de pago y registra la cuenta donde deseas recibir tu dinero o devolución.</p>
+            
+            <div style="display: grid; gap: 16px; margin-bottom: 24px;">
+              <div style="padding: 18px; border-radius: 16px; border: 2px solid transparent; background: var(--surface); cursor: pointer; transition: all 0.2s ease;" id="paymentNequi" onclick="selectPaymentMethod('nequi')">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                  <div style="font-size: 1.8rem;">📱</div>
+                  <div>
+                    <strong style="font-size: 1.1rem;">Nequi</strong>
+                    <p style="margin: 4px 0 0; color: var(--text-muted); font-size: 0.9rem;">315 3269410</p>
+                  </div>
+                  <input type="radio" name="paymentMethod" value="nequi" style="margin-left: auto;" />
+                </div>
+                <div id="nequiData" style="padding: 12px; border-radius: 12px; background: rgba(29,78,216,0.08); display: none;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+                    <div>
+                      <small style="color: var(--text-muted);">Número Nequi:</small>
+                      <div style="font-size: 1.1rem; font-weight: 700; color: var(--primary-dark); font-family: monospace;">315 3269410</div>
+                    </div>
+                    <button onclick="copyPaymentData('315 3269410')" style="padding: 8px 14px; border-radius: 10px; border: none; background: var(--primary); color: white; font-weight: 600; cursor: pointer;">Copiar</button>
+                  </div>
+                </div>
+              </div>
+
+              <div style="padding: 18px; border-radius: 16px; border: 2px solid transparent; background: var(--surface); cursor: pointer; transition: all 0.2s ease;" id="paymentBancolombia" onclick="selectPaymentMethod('bancolombia')">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                  <div style="font-size: 1.8rem;">🏦</div>
+                  <div>
+                    <strong style="font-size: 1.1rem;">Bancolombia</strong>
+                    <p style="margin: 4px 0 0; color: var(--text-muted); font-size: 0.9rem;">Cuenta de ahorros · 84850645671</p>
+                  </div>
+                  <input type="radio" name="paymentMethod" value="bancolombia" style="margin-left: auto;" />
+                </div>
+                <div id="bancolombiaData" style="padding: 12px; border-radius: 12px; background: rgba(29,78,216,0.08); display: none;">
+                  <div style="margin-bottom: 12px;">
+                    <small style="color: var(--text-muted);">Tipo de cuenta:</small>
+                    <div style="font-weight: 600; color: var(--text);">Cuenta de ahorros</div>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+                    <div>
+                      <small style="color: var(--text-muted);">Número de cuenta:</small>
+                      <div style="font-size: 1.1rem; font-weight: 700; color: var(--primary-dark); font-family: monospace;">84850645671</div>
+                    </div>
+                    <button onclick="copyPaymentData('84850645671')" style="padding: 8px 14px; border-radius: 10px; border: none; background: var(--primary); color: white; font-weight: 600; cursor: pointer;">Copiar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 16px; padding: 18px; border-radius: 18px; background: var(--surface-soft); border: 1px solid var(--border);">
+              <h4 style="margin: 0 0 16px;">Registra tus datos bancarios</h4>
+              <div class="form-grid" style="grid-template-columns: repeat(2,minmax(180px,1fr));">
+                <input id="bankHolderName" type="text" placeholder="Nombre completo del titular" />
+                <select id="bankDocumentType">
+                  <option value="">Tipo de documento</option>
+                  <option value="CC">Cédula de ciudadanía</option>
+                  <option value="CE">Cédula de extranjería</option>
+                  <option value="NIT">NIT</option>
+                  <option value="PP">Pasaporte</option>
+                </select>
+                <input id="bankDocumentNumber" type="text" placeholder="Número de documento" />
+                <input id="bankName" type="text" placeholder="Banco" />
+                <select id="bankAccountType">
+                  <option value="">Tipo de cuenta</option>
+                  <option value="Ahorros">Ahorros</option>
+                  <option value="Corriente">Corriente</option>
+                </select>
+                <input id="bankAccountNumber" type="text" placeholder="Número de cuenta" />
+                <input id="bankCellPhone" type="tel" placeholder="Número de celular" />
+                <input id="bankEmail" type="email" placeholder="Correo electrónico" readonly />
+                <select id="bankMethodType">
+                  <option value="">Selecciona tu método</option>
+                  <option value="Cuenta bancaria">Cuenta bancaria</option>
+                  <option value="Nequi">Nequi</option>
+                  <option value="Daviplata">Daviplata</option>
+                  <option value="Otro">Otro</option>
+                </select>
+                <label style="display:flex; align-items:center; gap:8px; min-height:48px;">
+                  <input id="bankIsPrimary" type="checkbox" />
+                  <span>Usar esta como cuenta principal</span>
+                </label>
+                <input id="bankAccountFormId" type="hidden" />
+              </div>
+              <div style="margin-top: 18px; display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+                <button type="button" onclick="saveBankAccount()">Guardar datos bancarios</button>
+                <button type="button" class="btn-secondary" onclick="resetBankAccountForm()">Limpiar</button>
+              </div>
+            </div>
+
+            <div id="selectedBankAccountSummary" style="margin-top: 16px; padding: 14px; border-radius: 12px; background: rgba(14,165,233,0.06); border: 1px solid rgba(14,165,233,0.18); color: var(--text); display: none;"></div>
+            <div id="checkoutBankAccountList" style="margin-top: 16px;"></div>
+
+            <div id="paymentMethodError" style="color: var(--danger); margin-bottom: 12px; display: none;">⚠️ Selecciona un método de pago para continuar.</div>
+            <button onclick="goCheckoutStep(4)">Continuar</button>
+          </div>
+        </div>
+
+        <div id="checkoutStep4" class="panel hidden">
+          <div class="panel-card">
+            <h3>Confirmación del pedido</h3>
+            <p style="color: var(--text-muted); margin-bottom: 18px;">Revisa el resumen final antes de confirmar tu pedido.</p>
+            
+            <div style="padding: 16px; border-radius: 14px; background: rgba(14,165,233,0.08); border-left: 4px solid var(--secondary); margin-bottom: 18px;">
+              <strong>Productos:</strong>
+              <div id="checkoutSummaryProducts" style="margin-top: 10px; color: var(--text); line-height: 1.8;"></div>
+            </div>
+
+            <div style="padding: 16px; border-radius: 14px; background: rgba(29,78,216,0.05); border-left: 4px solid var(--primary); margin-bottom: 18px;">
+              <strong>Total:</strong>
+              <div id="checkoutSummaryTotal" style="font-size: 1.8rem; font-weight: 800; color: var(--primary-dark);">$0</div>
+            </div>
+
+            <div style="margin-bottom: 18px;">
+              <strong>Método de pago:</strong>
+              <div id="checkoutSummaryMethod" style="padding: 12px; border-radius: 12px; background: var(--surface-soft); margin-top: 8px; font-weight: 600; color: var(--primary-dark);">No especificado</div>
+            </div>
+
+            <div style="margin-bottom: 18px;">
+              <strong>Cuenta registrada:</strong>
+              <div id="checkoutSummaryAccount" style="padding: 12px; border-radius: 12px; background: var(--surface-soft); margin-top: 8px; font-weight: 600; color: var(--primary-dark);">No seleccionada</div>
+            </div>
+
+            <div style="padding: 14px; border-radius: 12px; background: #fef3c7; border-left: 4px solid #f59e0b; margin-bottom: 18px;">
+              <strong style="color: #92400e;">⚠️ Importante</strong>
+              <p style="color: #92400e; margin: 6px 0 0; font-size: 0.9rem;">Tu pedido quedará en estado "Pendiente de verificación" y será enviado a WhatsApp y correo después de confirmar.</p>
+            </div>
+
+            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 12px; border-radius: 12px; background: var(--surface-soft); margin-bottom: 18px; cursor: pointer;">
+              <input id="paymentConfirmCheckbox" type="checkbox" style="margin-top: 4px; width: 18px; height: 18px; cursor: pointer;" />
+              <span style="color: var(--text); font-size: 0.95rem;">Confirmo que revisé la información y quiero finalizar mi pedido.</span>
+            </label>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <button onclick="goCheckoutStep(3)" style="background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 14px; border-radius: 12px; font-weight: 600;">Editar datos bancarios</button>
+              <button onclick="completePaymentRequest()" style="background: var(--primary); color: white; padding: 14px; border-radius: 12px; font-weight: 600; border: none;">Confirmar pedido</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="login">
+        <div class="section-header">
+          <div><h2>Bienvenido a ScriPapelería</h2><p>Inicia sesión para acceder a tu perfil, favoritos y seguimiento de pedidos.</p></div>
+          <button class="btn-secondary" onclick="navigateTo('home')">Volver a inicio</button>
+        </div>
+        <div class="panel-card">
+          <div class="form-grid" style="grid-template-columns: 1fr;">
+            <input id="loginEmail" type="email" placeholder="Correo electrónico" />
+            <input id="loginPassword" type="password" placeholder="Contraseña" />
+            <button onclick="signIn()">Iniciar sesión</button>
+            <button class="btn-secondary" onclick="navigateTo('register')">Crear cuenta</button>
+            <button class="btn-secondary" onclick="navigateTo('recovery')">¿Olvidaste tu contraseña?</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="register">
+        <div class="section-header">
+          <div><h2>Crea tu cuenta en ScriPapelería</h2><p>Regístrate rápido para guardar tus favoritos y revisar pedidos.</p></div>
+          <button class="btn-secondary" onclick="navigateTo('login')">Ya tengo cuenta</button>
+        </div>
+        <div class="panel-card">
+          <div class="form-grid">
+            <input id="registerName" type="text" placeholder="Nombre" />
+            <input id="registerLastName" type="text" placeholder="Apellido" />
+            <input id="registerEmail" type="email" placeholder="Correo electrónico" />
+            <input id="registerPhone" type="tel" placeholder="Teléfono" />
+            <input id="registerPassword" type="password" placeholder="Contraseña" />
+            <input id="registerConfirmPassword" type="password" placeholder="Confirmar contraseña" />
+          </div>
+          <button style="margin-top: 20px;" onclick="signUp()">Crear cuenta</button>
+        </div>
+      </section>
+
+      <section id="recovery">
+        <div class="section-header">
+          <div><h2>Recuperación de contraseña</h2><p>Escribe tu correo y te enviaremos instrucciones para restablecer tu cuenta.</p></div>
+          <button class="btn-secondary" onclick="navigateTo('login')">Volver a iniciar sesión</button>
+        </div>
+        <div class="panel-card">
+          <input id="recoveryEmail" type="email" placeholder="Correo electrónico" />
+          <button style="margin-top: 20px;" onclick="sendRecovery()">Enviar instrucciones</button>
+        </div>
+      </section>
+
+      <section id="profile">
+        <div class="section-header">
+          <div><h2>Hola, <span id="profileName">Visitante</span></h2><p>Administra tu cuenta, pedidos y favoritos desde un mismo lugar.</p></div>
+          <button class="btn-secondary" onclick="signOut()">Cerrar sesión</button>
+        </div>
+        <div class="profile-card">
+          <div class="profile-avatar">SP</div>
+          <div class="profile-details">
+            <h3 id="profileFullName">Perfil ScriPapelería</h3>
+            <p id="profileEmail">Regístrate para ver tu correo</p>
+            <div class="profile-menu">
+              <button onclick="navigateTo('orders')">Mis pedidos</button>
+              <button onclick="navigateTo('favorites')">Mis favoritos</button>
+              <button onclick="navigateTo('bankAccounts')">Mis cuentas bancarias</button>
+              <button onclick="navigateTo('contact')">Direcciones / Métodos de pago</button>
+              <button onclick="navigateTo('tracking')">Seguimiento de pedidos</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="orders">
+        <div class="section-header">
+          <div><h2>Historial de pedidos</h2><p>Consulta el estado de tus compras y revisa detalles de cada pedido.</p></div>
+          <button class="btn-secondary" onclick="navigateTo('profile')">Volver al perfil</button>
+        </div>
+        <div id="orderHistory"></div>
+      </section>
+
+      <section id="favorites">
+        <div class="section-header">
+          <div><h2>Mis favoritos</h2><p>Guarda los productos que más te gustan y añádelos al carrito cuando quieras.</p></div>
+          <button class="btn-secondary" onclick="navigateTo('catalog')">Seguir comprando</button>
+        </div>
+        <div id="favoriteGrid" class="favorite-grid"></div>
+      </section>
+
+      <section id="bankAccounts" class="hidden">
+        <div class="section-header">
+          <div><h2>Mis cuentas bancarias</h2><p>Gestiona tus cuentas bancarias para pagos y retiros.</p></div>
+          <button class="btn-secondary" onclick="navigateTo('profile')">Volver al perfil</button>
+        </div>
+        <div id="bankAccountsContainer"></div>
+      </section>
+
+      <section id="tracking" class="hidden">
+        <div class="section-header">
+          <div><h2>Seguimiento de pedidos</h2><p>Ingresa el número de pedido para saber en qué estado está tu envío.</p></div>
+          <button class="btn-secondary" onclick="navigateTo('home')">Volver</button>
+        </div>
+        <div class="panel-card">
+          <input id="trackOrderId" type="text" placeholder="Número de pedido" />
+          <button style="margin-top: 20px;" onclick="trackOrder()">Buscar pedido</button>
+          <div id="trackResult" style="margin-top: 18px;"></div>
+        </div>
+      </section>
+
+      <section id="admin">
+        <div class="section-header">
+          <div><h2>Panel administrativo</h2><p>Monitorea ventas, productos, pagos y pedidos del inventario.</p></div>
+          <button class="btn-secondary" onclick="navigateTo('home')">Salir del panel</button>
+        </div>
+        <div class="stats-grid">
+          <div class="stats-card"><span>Ventas</span><strong id="adminSales">$0</strong></div>
+          <div class="stats-card"><span>Pedidos</span><strong id="adminOrders">0</strong></div>
+          <div class="stats-card"><span>Clientes</span><strong id="adminCustomers">0</strong></div>
+          <div class="stats-card"><span>Productos agotados</span><strong id="adminOutOfStock">0</strong></div>
+        </div>
+        <div class="panel-card">
+          <h3>Solicitudes de pago pendientes</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Código</th><th>Cliente</th><th>Monto</th><th>Estado</th><th>Fecha</th><th>Acciones</th></tr></thead>
+              <tbody id="adminPaymentTable"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="panel-card">
+          <h3>Productos recientes</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Estado</th></tr></thead>
+              <tbody id="adminProductTable"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="panel-card">
+          <h3>Pedidos recientes</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Número</th><th>Cliente</th><th>Total</th><th>Estado</th><th>Fecha</th></tr></thead>
+              <tbody id="adminOrderTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <div class="section-header">
+          <div><h2>Contacto</h2><p>¿Necesitas ayuda? Estamos aquí para ayudarte a elegir lo mejor.</p></div>
+          <button class="btn-secondary" onclick="navigateTo('home')">Volver a inicio</button>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-panel">
+            <h2>Información de la tienda</h2>
+            <p>ScriPapelería es tu aliado en papelería y material escolar en Colombia. Contamos con envío nacional y atención rápida en WhatsApp.</p>
+            <div class="contact-buttons">
+              <a href="https://wa.me/573174437303" target="_blank">WhatsApp 317 443 7303</a>
+              <a href="https://www.instagram.com/scripapeleria?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">Instagram</a>
+              <a href="https://www.facebook.com/profile.php?id=61586510420035&locale=es_LA" target="_blank">Facebook ScriPapelería</a>
+            </div>
+            <div>
+              <h4>Dirección</h4>
+              <p>Bogotá D.C., Colombia</p>
+            </div>
+          </div>
+          <div class="contact-panel">
+            <h2>Envíanos un mensaje</h2>
+            <div class="form-grid">
+              <input id="contactName" type="text" placeholder="Nombre" />
+              <input id="contactEmail" type="email" placeholder="Correo" />
+              <input id="contactSubject" type="text" placeholder="Asunto" />
+              <textarea id="contactMessage" placeholder="Mensaje"></textarea>
+            </div>
+            <button onclick="sendMessage()">Enviar mensaje</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="info">
+        <div class="section-header">
+          <div><h2>Sobre ScriPapelería</h2><p>Una tienda en línea diseñanda para estudiantes, creativos y profesionales.</p></div>
+          <button class="btn-secondary" onclick="navigateTo('home')">Volver a inicio</button>
+        </div>
+        <div class="grid-4">
+          <article class="card"><div class="card-body"><h3>Misión</h3><p>Ofrecer productos de papelería con calidad, disponibilidad y experiencia digital profesional para Colombia.</p></div></article>
+          <article class="card"><div class="card-body"><h3>Visión</h3><p>Ser el marketplace de referencia para estudiantes y oficinas que buscan papelería confiable y creativa.</p></div></article>
+          <article class="card"><div class="card-body"><h3>Valores</h3><p>Confianza, orden, creatividad y atención amable que genera tranquilidad al comprar en línea.</p></div></article>
+          <article class="card"><div class="card-body"><h3>Compromiso</h3><p>Entregas puntuales, productos verificados y soporte directo para que tu pedido llegue sin contratiempos.</p></div></article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="logo-horizontal.jpeg" alt="ScriPapelería" />
+          <p>ScriPapelería es la tienda especializada en papelería escolar, artística y de oficina con estilo moderno y servicio profesional.</p>
+        </div>
+        <div class="footer-section">
+          <h4>ScriPapelería</h4>
+          <div class="footer-links">
+            <a onclick="navigateTo('home')">Inicio</a>
+            <a onclick="navigateTo('catalog')">Catálogo</a>
+            <a onclick="navigateTo('contact')">Contacto</a>
+            <a onclick="navigateTo('info')">Sobre nosotros</a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h4>Información</h4>
+          <div class="footer-links">
+            <a>Preguntas frecuentes</a>
+            <a>Políticas</a>
+            <a>Envíos</a>
+            <a>Devoluciones</a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h4>Síguenos</h4>
+          <div class="footer-links">
+            <a href="https://www.instagram.com/scripapeleria?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">
+              <svg viewBox="0 0 24 24" width="18" height="18" style="vertical-align:middle;margin-right:8px;fill:currentColor"><path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm5 6.5A4.5 4.5 0 1 1 7.5 13 4.505 4.505 0 0 1 12 8.5zm5.6-.9a1.05 1.05 0 1 1-1.05-1.05A1.05 1.05 0 0 1 17.6 7.6z"></path></svg>Instagram
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=61586510420035&locale=es_LA" target="_blank">
+              <svg viewBox="0 0 24 24" width="18" height="18" style="vertical-align:middle;margin-right:8px;fill:currentColor"><path d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2.1V12h2.1V9.6c0-2.1 1.26-3.2 3.08-3.2.9 0 1.84.16 1.84.16v2.02h-1.04c-1.03 0-1.35.64-1.35 1.29V12h2.3l-.37 2.9h-1.93v7A10 10 0 0 0 22 12z"></path></svg>Facebook
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026 ScriPapelería. Todos los derechos reservados.</div>
+        <div>Diseñado para una experiencia clara, confiable y profesional.</div>
+      </div>
+    </footer>
+  </div>
+
+  <div class="toast" id="toastMessage"><svg viewBox="0 0 24 24"><path d="M9 16.2l-4.2-4.2-1.4 1.4L9 19 20.6 7.4 19.2 6z"></path></svg><span id="toastText"></span></div>
+
+  <script>
+    // ============ CONFIGURACIÓN EMAILJS ============
+    // INSTRUCCIONES: Debes obtener estos valores de https://www.emailjs.com/
+    // 1. Registrate en emailjs.com
+    // 2. En "Email Services" conecta tu Gmail/Outlook y copia el SERVICE_ID
+    // 3. En "Email Templates" crea una plantilla y copia el TEMPLATE_ID
+    // 4. En "Account > API Keys" copia tu PUBLIC_KEY
+    // 5. Reemplaza los valores abajo con los reales
+    
+    const EMAILJS_SERVICE_ID = 'service_w6m7uim';
+    const EMAILJS_TEMPLATE_ID = 'template_2frpmzw';
+    const EMAILJS_PUBLIC_KEY = 'RfdCWTeNk3sI3M7bz';
+    
+    // Destino de correos
+    const EMAILJS_TO_EMAIL = 'scripapeleriadarien@gmail.com';
+    
+    // Variable de control: se usa para verificar si está configurado
+    let emailjsConfigured = false;
+    
+    // Inicializar EmailJS
+    (function() {
+      if (typeof emailjs === 'undefined') {
+        console.warn('⚠️ EmailJS no cargó correctamente. Verifica la CDN o la conexión a internet.');
+        emailjsConfigured = false;
+        return;
+      }
+
+      // Validar que todos los valores estén presentes
+      if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
+        console.warn('⚠️ EmailJS no configurado. Valores faltantes:');
+        if (!EMAILJS_SERVICE_ID) console.warn('  - EMAILJS_SERVICE_ID está vacío');
+        if (!EMAILJS_TEMPLATE_ID) console.warn('  - EMAILJS_TEMPLATE_ID está vacío');
+        if (!EMAILJS_PUBLIC_KEY) console.warn('  - EMAILJS_PUBLIC_KEY está vacío');
+        console.warn('Instrucciones: Ve a EMAILJS_SETUP.md o actualiza los valores en el script.');
+        emailjsConfigured = false;
+        return;
+      }
+      
+      // Inicializar con la Public Key
+      try {
+        emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+        emailjsConfigured = true;
+        console.log('✅ EmailJS inicializado correctamente.');
+        console.log('   Service ID:', EMAILJS_SERVICE_ID);
+        console.log('   Template ID:', EMAILJS_TEMPLATE_ID);
+        console.log('   Email destino:', EMAILJS_TO_EMAIL);
+      } catch (error) {
+        console.error('❌ Error al inicializar EmailJS:', error);
+        emailjsConfigured = false;
+      }
+    })();
+    // ============================================
+
+    const data = {
+      categories: [
+        'Cuadernos','Agendas y planners','Esferos y lapiceros','Lápices','Colores','Marcadores','Resaltadores','Papelería escolar','Papelería universitaria','Oficina','Arte y dibujo','Manualidades','Adhesivos','Carpetas','Archivadores','Papel','Cartulinas','Impresión y escritura','Accesorios escolares','Organizadores','Regalos','Kits escolares'
+      ],
+      brands: ['ScriPap', 'Creativa', 'Colmena', 'OfiPlus', 'ArteNova', 'Premium Line', 'EcoDesign'],
+      products: [
+        {
+          id: 'p1', name: 'Cuaderno argollado universitario 100 hojas', brand: 'ScriPap', category: 'Cuadernos', price: 18500, oldPrice: 22000, discount: 16, stock: 24, rating: 4.8, reviews: 142,
+          description: 'Cuaderno resistente con hoja rayada, tapa semidura y anillas metálicas. Ideal para universidades y clases largas.',
+          features: ['100 hojas rayadas','Anillas metálicas','Tapa semidura','Formato carta'],
+          specs: ['Dimensiones: 21 x 28 cm','Gramaje: 70 g/m²','Color: crema'],
+          images: ['https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=800&q=80'],
+          tags: ['Universidad','Anillado'], createdAt: '2026-06-10'
+        },
+        {
+          id: 'p2', name: 'Agenda semanal 2026 tapa azul', brand: 'Creativa', category: 'Agendas y planners', price: 42000, oldPrice: 0, discount: 0, stock: 38, rating: 4.9, reviews: 88,
+          description: 'Agenda profesional con diseño moderno, planner semanal y espacio para notas diarias.',
+          features: ['Planificador semanal','Diseño minimal','Papel de alta calidad','Calendario anual'],
+          specs: ['Tamaño: 17 x 24 cm','Páginas: 192','Color: azul cielo'],
+          images: ['https://images.unsplash.com/photo-1524967553415-2d8eb392cc5e?auto=format&fit=crop&w=800&q=80'],
+          tags: ['Planificación','Organización'], createdAt: '2026-05-15'
+        },
+        {
+          id: 'p3', name: 'Esfero punta fina color negro', brand: 'Colmena', category: 'Esferos y lapiceros', price: 8500, oldPrice: 0, discount: 0, stock: 15, rating: 4.6, reviews: 214,
+          description: 'Juego de esferos con tinta suave, seco rápido y diseño ergonómico para uso diario.',
+          features: ['Tinta negra','Punta 0.7 mm','Cuerpo antideslizante'],
+          specs: ['Cantidad: 5 unidades','Tipo: gel','Garantía: 30 días'],
+          images: ['https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800&q=80'],
+          tags: ['Oficina','Escritura'], createdAt: '2026-07-01'
+        },
+        {
+          id: 'p4', name: 'Set acuarelas profesionales 24 colores', brand: 'ArteNova', category: 'Arte y dibujo', price: 69000, oldPrice: 79000, discount: 13, stock: 9, rating: 4.7, reviews: 67,
+          description: 'Caja de acuarelas con 24 tonos vibrantes, pincel dual y empaque resistente para estudio.',
+          features: ['24 colores','Incluye pincel','Fácil mezcla','Duradero'],
+          specs: ['Peso: 320 g','Incluye paleta','Formato compacto'],
+          images: ['https://images.unsplash.com/photo-1494256997604-768d1f608cac?auto=format&fit=crop&w=800&q=80'],
+          tags: ['Pintura','Manualidades'], createdAt: '2026-04-22'
+        },
+        {
+          id: 'p5', name: 'Resaltadores pastel x6', brand: 'EcoDesign', category: 'Resaltadores', price: 22000, oldPrice: 0, discount: 0, stock: 5, rating: 4.3, reviews: 49,
+          description: 'Juego de resaltadores con colores suaves, punta biselada y tinta anti-borrado.',
+          features: ['Colores pastel','Punta biselada','Tinta duradera'],
+          specs: ['Cantidad: 6 unidades','Color: pastel','Secado rápido'],
+          images: ['https://images.unsplash.com/photo-1512462250292-117c1e8c0f1c?auto=format&fit=crop&w=800&q=80'],
+          tags: ['Estudio','Notas'], createdAt: '2026-06-28'
+        },
+        {
+          id: 'p6', name: 'Set de papeles para manualidades', brand: 'Premium Line', category: 'Manualidades', price: 28500, oldPrice: 0, discount: 0, stock: 0, rating: 4.4, reviews: 32,
+          description: 'Colección de papeles de colores, texturas y gramajes ideales para proyectos creativos.',
+          features: ['Varios gramajes','Colores vibrantes','Ideal para manualidades'],
+          specs: ['Contenido: 50 hojas','Tamaño: carta','Material: papel colorido'],
+          images: ['https://images.unsplash.com/photo-1529101091764-c3526daf38fe?auto=format&fit=crop&w=800&q=80'],
+          tags: ['Manualidades','DIY'], createdAt: '2026-03-03'
+        },
+        {
+          id: 'p7', name: 'Organizador de escritorio modular', brand: 'OfiPlus', category: 'Organizadores', price: 56000, oldPrice: 64000, discount: 12, stock: 7, rating: 4.8, reviews: 58,
+          description: 'Organizador con compartimentos ajustables para lápices, notas y dispositivos pequeños.',
+          features: ['Modular','Material resistente','Fácil armado'],
+          specs: ['Dimensiones: 28 x 18 x 12 cm','Color: blanco y azul','Garantía: 6 meses'],
+          images: ['https://images.unsplash.com/photo-1585386959984-a415522c07fb?auto=format&fit=crop&w=800&q=80'],
+          tags: ['Oficina','Orden'], createdAt: '2026-02-08'
+        },
+        {
+          id: 'p8', name: 'Cartulina doble cara x20 hojas', brand: 'ScriPap', category: 'Cartulinas', price: 32000, oldPrice: 0, discount: 0, stock: 12, rating: 4.5, reviews: 71,
+          description: 'Cartulina de doble cara en tonos pastel y saturados para proyectos escolares y publicidad.',
+          features: ['Doble cara','20 hojas','Colores mixtos'],
+          specs: ['Tamaño: carta','Gramaje: 180 g/m²','Resistente al agua ligera'],
+          images: ['https://images.unsplash.com/photo-1472134233053-bcaa0e3aecae?auto=format&fit=crop&w=800&q=80'],
+          tags: ['Papelería','Manualidades'], createdAt: '2026-07-10'
+        }
+      ],
+      orders: [
+        { id: 'SCP-1402', date: '08/07/2026', total: 126500, status: 'En camino', products: ['p1','p5'], customer: 'Laura M.' },
+        { id: 'SCP-1394', date: '03/07/2026', total: 79000, status: 'Entregado', products: ['p2','p7'], customer: 'Andrés P.' },
+        { id: 'SCP-1388', date: '27/06/2026', total: 46000, status: 'Preparando pedido', products: ['p3','p8'], customer: 'Camila R.' }
+      ]
+    };
+
+    let state = {
+      activePage: 'home',
+      cart: [],
+      favorites: [],
+      user: { logged: false, name: '', lastName: '', email: '', phone: '' },
+      selectedProductId: null,
+      checkoutStep: 1,
+      filters: {
+        query: '', category: '', brand: '', order: 'recomendados', minPrice: 0, maxPrice: 0, rating: '', stock: ''
+      }
+    };
+
+    const currency = value => value.toLocaleString('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
+
+    function init() {
+      loadState();
+      populateFilters();
+      renderFeatured();
+      renderCatalog();
+      renderCounts();
+      updateProfilePanel();
+      renderAdmin();
+      if (!data.products.length) showToast('No hay productos disponibles por ahora.');
+      setTimeout(() => {
+        document.querySelectorAll('#featuredProducts, #catalogGrid').forEach(node => node.classList.remove('loading'));
+      }, 900);
+    }
+
+    function loadState() {
+      try {
+        const savedCart = localStorage.getItem('scriCart');
+        const savedFavorites = localStorage.getItem('scriFavorites');
+        const savedUser = localStorage.getItem('scriUser');
+        const savedUsers = localStorage.getItem('scriUsers');
+        const savedOrders = localStorage.getItem('scriOrders');
+        const savedPayments = localStorage.getItem('scriPaymentRequests');
+        const savedBankAccounts = localStorage.getItem('scriBankAccounts');
+        if (savedCart) state.cart = JSON.parse(savedCart);
+        if (savedFavorites) state.favorites = JSON.parse(savedFavorites);
+        if (savedUser) state.user = JSON.parse(savedUser);
+        if (savedUsers) window.scriUsers = JSON.parse(savedUsers);
+        else window.scriUsers = [];
+        if (savedOrders) data.orders = JSON.parse(savedOrders);
+        if (savedPayments) window.scriPaymentRequests = JSON.parse(savedPayments);
+        else window.scriPaymentRequests = [];
+        if (savedBankAccounts) window.scriBankAccounts = JSON.parse(savedBankAccounts);
+        else window.scriBankAccounts = [];
+      } catch (e) {
+        console.error('Error cargando estado desde localStorage', e);
+      }
+      renderCounts();
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem('scriCart', JSON.stringify(state.cart));
+        localStorage.setItem('scriFavorites', JSON.stringify(state.favorites));
+        localStorage.setItem('scriUser', JSON.stringify(state.user));
+        localStorage.setItem('scriUsers', JSON.stringify(window.scriUsers || []));
+        localStorage.setItem('scriOrders', JSON.stringify(data.orders || []));
+        localStorage.setItem('scriPaymentRequests', JSON.stringify(window.scriPaymentRequests || []));
+        localStorage.setItem('scriBankAccounts', JSON.stringify(window.scriBankAccounts || []));
+      } catch (e) {
+        console.error('Error guardando estado en localStorage', e);
+      }
+    }
+
+    function navigateTo(page) {
+      const sections = document.querySelectorAll('main section');
+      sections.forEach(section => section.classList.remove('active'));
+      const destination = document.getElementById(page);
+      if (!destination) return;
+      destination.classList.add('active');
+      state.activePage = page;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (page === 'productPage' && state.selectedProductId) renderProductDetail(state.selectedProductId);
+      if (page === 'cart') renderCart();
+      if (page === 'orders') renderOrders();
+      if (page === 'favorites') renderFavorites();
+      if (page === 'admin') renderAdmin();
+      if (page === 'profile') updateProfilePanel();
+      if (page === 'bankAccounts') renderBankAccounts();
+      if (page === 'checkout') {
+        state.checkoutStep = state.user.logged ? 3 : 1;
+        state.checkoutData = state.checkoutData || {};
+        updateCheckout();
+      }
+      if (page === 'tracking') document.getElementById('trackResult').innerHTML = '';
+    }
+
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (!header) return;
+      if (window.scrollY > 20) header.classList.add('shrink');
+      else header.classList.remove('shrink');
+    });
+
+    function populateFilters() {
+      const categorySelect = document.getElementById('filterCategory');
+      const brandSelect = document.getElementById('filterBrand');
+      data.categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categorySelect.appendChild(option);
+      });
+      data.brands.forEach(brand => {
+        const option = document.createElement('option');
+        option.value = brand;
+        option.textContent = brand;
+        brandSelect.appendChild(option);
+      });
+    }
+
+    function renderFeatured() {
+      const featured = document.getElementById('featuredProducts');
+      featured.innerHTML = '';
+      data.products.slice(0, 6).forEach(product => featured.appendChild(createProductCard(product)));
+    }
+
+    function renderCatalog() {
+      const grid = document.getElementById('catalogGrid');
+      grid.innerHTML = '';
+      const filtered = getFilteredProducts();
+      if (!filtered.length) {
+        grid.innerHTML = '<div style="grid-column:1/-1;padding:30px;border-radius:24px;background:white;text-align:center;color:var(--text-muted);">No encontramos productos que coincidan con tu búsqueda.</div>';
+        return;
+      }
+      filtered.forEach(product => grid.appendChild(createProductCard(product)));
+    }
+
+    function getFilteredProducts() {
+      const query = document.getElementById('filterSearch').value.trim().toLowerCase();
+      const category = document.getElementById('filterCategory').value;
+      const brand = document.getElementById('filterBrand').value;
+      const order = document.getElementById('filterOrder').value;
+      const minPrice = Number(document.getElementById('filterMinPrice').value) || 0;
+      const maxPrice = Number(document.getElementById('filterMaxPrice').value) || 0;
+      const rating = document.getElementById('filterRating').value;
+      const stock = document.getElementById('filterStock').value;
+
+      let list = [...data.products];
+      if (query) list = list.filter(product => [product.name, product.brand, product.category, product.description].some(text => text.toLowerCase().includes(query)));
+      if (category) list = list.filter(product => product.category === category);
+      if (brand) list = list.filter(product => product.brand === brand);
+      if (minPrice) list = list.filter(product => product.price >= minPrice);
+      if (maxPrice) list = list.filter(product => product.price <= maxPrice);
+      if (rating) list = list.filter(product => product.rating >= Number(rating));
+      if (stock) {
+        if (stock === 'available') list = list.filter(p => p.stock > 0);
+        if (stock === 'lastUnits') list = list.filter(p => p.stock > 0 && p.stock < 10);
+        if (stock === 'out') list = list.filter(p => p.stock === 0);
+      }
+      if (order === 'precioAsc') list.sort((a,b) => a.price - b.price);
+      if (order === 'precioDesc') list.sort((a,b) => b.price - a.price);
+      if (order === 'mejorCalificados') list.sort((a,b) => b.rating - a.rating);
+      if (order === 'masVendidos') list.sort((a,b) => (b.reviews || 0) - (a.reviews || 0));
+      if (order === 'recientes') list.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+      return list;
+    }
+
+    function createProductCard(product) {
+      const card = document.createElement('article');
+      card.className = 'product-card';
+
+      const image = document.createElement('div');
+      image.className = 'product-image';
+      const img = document.createElement('img');
+      img.src = product.images[0];
+      img.alt = product.name;
+      image.appendChild(img);
+      card.appendChild(image);
+
+      const favButton = document.createElement('button');
+      favButton.className = 'favorite' + (state.favorites.includes(product.id) ? ' active' : '');
+      favButton.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 10.54L12 21.35Z"></path></svg>';
+      favButton.onclick = () => toggleFavorite(product.id);
+      card.appendChild(favButton);
+
+      const content = document.createElement('div');
+      content.className = 'product-content';
+      content.innerHTML = `
+        <h3>${product.name}</h3>
+        <div class="product-meta"><span>${product.brand}</span><span>${product.category}</span></div>
+      `;
+
+      const priceGroup = document.createElement('div');
+      priceGroup.className = 'price-group';
+      const price = document.createElement('span'); price.className = 'price'; price.textContent = currency(product.price);
+      priceGroup.appendChild(price);
+      if (product.oldPrice) {
+        const oldPrice = document.createElement('span'); oldPrice.className = 'old-price'; oldPrice.textContent = currency(product.oldPrice);
+        const discount = document.createElement('span'); discount.className = 'discount'; discount.textContent = `-${product.discount}%`;
+        priceGroup.appendChild(oldPrice);
+        priceGroup.appendChild(discount);
+      }
+
+      const status = document.createElement('span');
+      status.className = 'status';
+      if (product.stock === 0) { status.textContent = 'Agotado'; status.style.background = 'rgba(239,68,68,0.1)'; status.style.color = '#b91c1c'; }
+      else if (product.stock < 10) { status.textContent = 'Últimas unidades'; status.style.background = 'rgba(245,158,11,0.12)'; status.style.color = '#92400e'; }
+      else { status.textContent = 'Disponible'; status.style.background = 'rgba(22,163,74,0.12)'; status.style.color = '#166534'; }
+
+      const rating = document.createElement('div'); rating.className = 'rating'; rating.textContent = `${product.rating} ★ (${product.reviews})`;
+
+      const actions = document.createElement('div'); actions.className = 'actions';
+      const addCart = document.createElement('button'); addCart.className = 'btn-primary-solid'; addCart.textContent = product.stock === 0 ? 'Sin stock' : 'Agregar al carrito';
+      addCart.disabled = product.stock === 0;
+      addCart.onclick = () => { addToCart(product.id, 1); };
+      const see = document.createElement('button'); see.className = 'btn-secondary-outline'; see.textContent = 'Ver producto';
+      see.onclick = () => openProduct(product.id);
+      actions.appendChild(addCart);
+      actions.appendChild(see);
+
+      content.appendChild(rating);
+      content.appendChild(priceGroup);
+      content.appendChild(status);
+      content.appendChild(actions);
+      card.appendChild(content);
+      return card;
+    }
+
+    function filterByCategory(category) {
+      document.getElementById('filterCategory').value = category;
+      applyFilters();
+      navigateTo('catalog');
+    }
+
+    function applySearch() {
+      document.getElementById('filterSearch').value = document.getElementById('globalSearch').value;
+      renderCatalog();
+      navigateTo('catalog');
+    }
+
+    function applyFilters() {
+      renderCatalog();
+    }
+
+    function openProduct(id) {
+      state.selectedProductId = id;
+      renderProductDetail(id);
+      navigateTo('productPage');
+    }
+
+    const detailProduct = { id: '' };
+
+    function renderProductDetail(id) {
+      const product = data.products.find(item => item.id === id);
+      if (!product) return;
+      Object.assign(detailProduct, product);
+      document.getElementById('detailMainImage').src = product.images[0];
+      document.getElementById('detailBrand').textContent = product.brand;
+      document.getElementById('detailRating').textContent = `${product.rating} ★`;
+      document.getElementById('detailReviews').textContent = `${product.reviews} reseñas`;
+      document.getElementById('detailName').textContent = product.name;
+      document.getElementById('detailPrice').textContent = currency(product.price);
+      document.getElementById('detailOldPrice').textContent = product.oldPrice ? currency(product.oldPrice) : '';
+      document.getElementById('detailDiscount').textContent = product.discount ? `Ahorra ${product.discount}%` : '';
+      document.getElementById('detailAvailability').textContent = product.stock === 0 ? 'Este producto está agotado.' : `Stock disponible: ${product.stock} unidades.`;
+      document.getElementById('detailSummaryBrand').textContent = product.brand;
+      document.getElementById('detailSummaryCategory').textContent = product.category;
+      document.getElementById('detailSummaryStock').textContent = product.stock > 0 ? `${product.stock} unidades` : '0 unidades';
+      document.getElementById('detailSummaryStatus').textContent = product.stock === 0 ? 'Agotado' : product.stock < 10 ? 'Últimas unidades' : 'Disponible';
+      document.getElementById('detailQuantity').value = 1;
+      const tags = document.getElementById('detailTags'); tags.innerHTML = '';
+      product.tags.forEach(tag => tags.insertAdjacentHTML('beforeend', `<span>${tag}</span>`));
+      const thumbs = document.getElementById('detailThumbs'); thumbs.innerHTML = '';
+      product.images.forEach((image, index) => {
+        const btn = document.createElement('button');
+        btn.className = index === 0 ? 'active' : '';
+        btn.innerHTML = `<img src="${image}" alt="Miniatura ${index + 1}" />`;
+        btn.onclick = () => {
+          document.querySelectorAll('.thumb-grid button').forEach(node => node.classList.remove('active'));
+          btn.classList.add('active');
+          document.getElementById('detailMainImage').src = image;
+        };
+        thumbs.appendChild(btn);
+      });
+
+      const tabButtons = document.querySelectorAll('.tab-button');
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      tabButtons[0].classList.add('active');
+      renderDetailTab('descripcion');
+      renderRelated(product.category, product.id);
+
+      const breadcrumb = document.getElementById('productBreadcrumb');
+      breadcrumb.innerHTML = `
+        <button onclick="navigateTo('home')">Inicio</button>
+        <span>›</span>
+        <button onclick="navigateTo('catalog')">Catálogo</button>
+        <span>›</span>
+        <span>${product.category}</span>
+      `;
+    }
+
+    document.querySelectorAll('.tab-button').forEach(btn => btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-button').forEach(node => node.classList.remove('active'));
+      btn.classList.add('active');
+      renderDetailTab(btn.dataset.tab);
+    }));
+
+    function renderDetailTab(type) {
+      const content = document.getElementById('detailTabContent');
+      const product = detailProduct;
+      if (!product) return;
+      if (type === 'descripcion') {
+        content.innerHTML = `<p>${product.description}</p>`;
+      } else if (type === 'caracteristicas') {
+        content.innerHTML = `<ul>${product.features.map(item => `<li>${item}</li>`).join('')}</ul>`;
+      } else if (type === 'especificaciones') {
+        content.innerHTML = `<ul>${product.specs.map(item => `<li>${item}</li>`).join('')}</ul>`;
+      } else if (type === 'opiniones') {
+        content.innerHTML = `<p>Opiniones reales de clientes que han comprado y usado este producto. Valoración promedio: ${product.rating} estrellas.</p>`;
+      }
+    }
+
+    function renderRelated(category, productId) {
+      const related = document.getElementById('relatedProducts');
+      related.innerHTML = '';
+      data.products.filter(item => item.category === category && item.id !== productId).slice(0, 4).forEach(product => related.appendChild(createProductCard(product)));
+      if (!related.children.length) {
+        related.innerHTML = '<div style="grid-column:1/-1;padding:20px;border-radius:24px;background:var(--surface);color:var(--text-muted);">No hay productos relacionados disponibles.</div>';
+      }
+    }
+
+    function addToCart(id, qty = 1) {
+      const product = data.products.find(item => item.id === id);
+      if (!product || product.stock === 0) {
+        showToast('No es posible agregar el producto al carrito.');
+        return;
+      }
+      const item = state.cart.find(entry => entry.id === id);
+      if (item) item.quantity = Math.min(item.quantity + qty, product.stock);
+      else state.cart.push({ id, quantity: Math.min(qty, product.stock) });
+      saveState();
+      renderCounts();
+      showToast('Producto agregado al carrito ✓');
+      if (state.activePage === 'cart') renderCart();
+    }
+
+    function renderCart() {
+      const list = document.getElementById('cartList');
+      list.innerHTML = '';
+      if (!state.cart.length) {
+        list.innerHTML = '<div style="padding:30px;background:var(--surface);border-radius:24px;color:var(--text-muted);">Tu carrito está vacío. Agrega productos y sigue comprando.</div>';
+        document.getElementById('cartSubtotal').textContent = '$0';
+        document.getElementById('cartDiscount').textContent = '$0';
+        document.getElementById('cartTotal').textContent = '$0';
+        return;
+      }
+      let subtotal = 0;
+      let discount = 0;
+      state.cart.forEach(item => {
+        const product = data.products.find(p => p.id === item.id);
+        if (!product) return;
+        const line = document.createElement('div');
+        line.className = 'cart-item';
+        line.innerHTML = `
+          <img src="${product.images[0]}" alt="${product.name}" />
+          <div class="cart-content">
+            <h4>${product.name}</h4>
+            <small>${product.brand} · ${product.category}</small>
+            <small>${product.stock > 0 ? 'Disponible' : 'Agotado'}</small>
+            <div class="quantity-control" style="margin-top:10px;">
+              <button type="button" onclick="updateCartQuantity('${item.id}', -1)">-</button>
+              <input type="number" min="1" value="${item.quantity}" onchange="setCartQuantity('${item.id}', this.value)" />
+              <button type="button" onclick="updateCartQuantity('${item.id}', 1)">+</button>
+            </div>
+          </div>
+          <div class="cart-actions">
+            <strong>${currency(product.price * item.quantity)}</strong>
+            <button class="cart-remove" onclick="removeFromCart('${item.id}')">Eliminar</button>
+          </div>
+        `;
+        list.appendChild(line);
+        subtotal += product.price * item.quantity;
+        if (product.oldPrice) discount += (product.oldPrice - product.price) * item.quantity;
+      });
+      const shipping = state.cart.length ? 12000 : 0;
+      document.getElementById('cartSubtotal').textContent = currency(subtotal);
+      document.getElementById('cartDiscount').textContent = discount ? `-${currency(discount)}` : '$0';
+      document.getElementById('cartTotal').textContent = currency(subtotal - discount + shipping);
+    }
+
+    function updateCartQuantity(id, delta) {
+      const item = state.cart.find(entry => entry.id === id);
+      const product = data.products.find(p => p.id === id);
+      if (!item || !product) return;
+      item.quantity = Math.min(Math.max(item.quantity + delta, 1), product.stock);
+      saveState();
+      renderCart();
+    }
+
+    function setCartQuantity(id, value) {
+      const item = state.cart.find(entry => entry.id === id);
+      const product = data.products.find(p => p.id === id);
+      if (!item || !product) return;
+      const quantity = Math.min(Math.max(Number(value) || 1, 1), product.stock);
+      item.quantity = quantity;
+      saveState();
+      renderCart();
+    }
+
+    function removeFromCart(id) {
+      state.cart = state.cart.filter(entry => entry.id !== id);
+      saveState();
+      renderCart();
+      renderCounts();
+      showToast('Producto eliminado del carrito.');
+    }
+
+    function changeDetailQuantity(delta) {
+      const input = document.getElementById('detailQuantity');
+      const value = Math.max(Number(input.value) + delta, 1);
+      input.value = value;
+    }
+
+    function toggleFavorite(id) {
+      if (state.favorites.includes(id)) state.favorites = state.favorites.filter(item => item !== id);
+      else state.favorites.push(id);
+      saveState();
+      renderCounts();
+      if (state.activePage === 'favorites') renderFavorites();
+      renderFeatured();
+      renderCatalog();
+      showToast('Favorito actualizado.');
+    }
+
+    function addToFavorites(id) {
+      if (!state.favorites.includes(id)) {
+        state.favorites.push(id);
+        saveState();
+        showToast('Producto guardado en favoritos.');
+      }
+      renderCounts();
+    }
+
+    function renderCounts() {
+      document.getElementById('cartCount').textContent = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById('favoriteCount').textContent = state.favorites.length;
+    }
+
+    function signIn() {
+      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+      const password = document.getElementById('loginPassword').value;
+      if (!email || !password) { showToast('Completa el correo y la contraseña.'); return; }
+      const users = window.scriUsers || [];
+      const user = users.find(u => u.email === email && u.password === btoa(password));
+      if (!user) { showToast('Correo o contraseña incorrectos.'); return; }
+      state.user = { logged: true, name: user.name, lastName: user.lastName, email: user.email, phone: user.phone };
+      saveState();
+      updateProfilePanel();
+      showToast('Has iniciado sesión en ScriPapelería.');
+      state.checkoutStep = 3;
+      navigateTo('checkout');
+    }
+
+    function signUp() {
+      const name = document.getElementById('registerName').value.trim();
+      const lastName = document.getElementById('registerLastName').value.trim();
+      const email = document.getElementById('registerEmail').value.trim().toLowerCase();
+      const phone = document.getElementById('registerPhone').value.trim();
+      const password = document.getElementById('registerPassword').value;
+      const confirm = document.getElementById('registerConfirmPassword').value;
+      if (!name || !lastName || !email || !phone || !password || !confirm) { showToast('Completa todos los campos para crear tu cuenta.'); return; }
+      if (password !== confirm) { showToast('Las contraseñas deben coincidir.'); return; }
+      window.scriUsers = window.scriUsers || [];
+      if (window.scriUsers.find(u => u.email === email)) { showToast('Ya existe una cuenta con ese correo.'); return; }
+      const newUser = { name, lastName, email, phone, password: btoa(password), addresses: [], orders: [] };
+      window.scriUsers.push(newUser);
+      state.user = { logged: true, name, lastName, email, phone };
+      saveState();
+      updateProfilePanel();
+      showToast('Cuenta creada correctamente. ¡Bienvenido!');
+      state.checkoutStep = 3;
+      navigateTo('checkout');
+    }
+
+    function signOut() {
+      state.user = { logged: false, name: '', lastName: '', email: '', phone: '' };
+      saveState();
+      updateProfilePanel();
+      showToast('Has cerrado sesión.');
+      navigateTo('home');
+    }
+
+    function sendRecovery() {
+      const email = document.getElementById('recoveryEmail').value.trim().toLowerCase();
+      if (!email) { showToast('Ingresa tu correo para recuperar la contraseña.'); return; }
+      window.scriUsers = window.scriUsers || [];
+      const user = window.scriUsers.find(u => u.email === email);
+      if (!user) { showToast('No existe una cuenta registrada con ese correo.'); return; }
+      // Generar token temporal y guardarlo localmente (solo para entorno sin backend)
+      const token = Math.floor(100000 + Math.random() * 900000).toString();
+      const recovery = JSON.parse(localStorage.getItem('scriRecovery') || '{}');
+      recovery[email] = { token, expires: Date.now() + 1000 * 60 * 60 }; // 1 hora
+      localStorage.setItem('scriRecovery', JSON.stringify(recovery));
+      // Abrir cliente de correo con instrucciones opcionales
+      const subject = encodeURIComponent('Recuperación de contraseña ScriPapelería');
+      const body = encodeURIComponent(`Hola ${user.name},\n\nSolicitaste recuperar tu contraseña. Usa este código temporal para restablecer tu contraseña: ${token}\n\nIngresa a la sección de recuperación y pega el código para continuar.`);
+      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+      showToast('Se abrió tu aplicación de correo con instrucciones.');
+    }
+
+    function updateProfilePanel() {
+      const nameText = state.user.logged ? `${state.user.name} ${state.user.lastName}` : 'Visitante';
+      document.getElementById('profileName').textContent = nameText;
+      document.getElementById('profileFullName').textContent = state.user.logged ? nameText : 'Perfil ScriPapelería';
+      document.getElementById('profileEmail').textContent = state.user.logged ? state.user.email : 'Regístrate para ver tu correo';
+      document.querySelector('.profile-avatar').textContent = state.user.logged ? state.user.name.charAt(0).toUpperCase() : 'SP';
+    }
+
+    function getUserBankAccounts() {
+      window.scriBankAccounts = window.scriBankAccounts || [];
+      if (!state.user.logged || !state.user.email) return [];
+      return window.scriBankAccounts.filter(account => account.userEmail === state.user.email);
+    }
+
+    function maskAccountNumber(value) {
+      const digits = String(value || '').replace(/\D/g, '');
+      if (!digits) return '••••••';
+      return `••••••${digits.slice(-4)}`;
+    }
+
+    function resetBankAccountForm() {
+      document.getElementById('bankHolderName').value = '';
+      document.getElementById('bankDocumentType').value = '';
+      document.getElementById('bankDocumentNumber').value = '';
+      document.getElementById('bankName').value = '';
+      document.getElementById('bankAccountType').value = '';
+      document.getElementById('bankAccountNumber').value = '';
+      document.getElementById('bankCellPhone').value = '';
+      document.getElementById('bankEmail').value = state.user.email || '';
+      document.getElementById('bankMethodType').value = '';
+      document.getElementById('bankIsPrimary').checked = false;
+      document.getElementById('bankAccountFormId').value = '';
+    }
+
+    function selectCheckoutBankAccount(id) {
+      state.checkoutData = state.checkoutData || {};
+      state.checkoutData.bankAccountId = id;
+      updateCheckout();
+      renderBankAccounts();
+    }
+
+    function renderCheckoutBankSelection() {
+      const container = document.getElementById('checkoutBankAccountList');
+      if (!container) return;
+      const accounts = getUserBankAccounts();
+      if (!accounts.length) {
+        container.innerHTML = '<div style="padding:16px;border-radius:12px;background:var(--surface);color:var(--text-muted);">Aún no has registrado una cuenta bancaria.</div>';
+        return;
+      }
+
+      const selectedId = state.checkoutData?.bankAccountId || accounts.find(acc => acc.isPrimary)?.id || accounts[0].id;
+      state.checkoutData = state.checkoutData || {};
+      state.checkoutData.bankAccountId = selectedId;
+
+      container.innerHTML = accounts.map(account => `
+        <label style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:12px;background:var(--surface);border:1px solid var(--border);margin-bottom:10px;cursor:pointer;">
+          <input type="radio" name="selectedBankAccount" value="${account.id}" ${selectedId === account.id ? 'checked' : ''} onchange="selectCheckoutBankAccount('${account.id}')" />
+          <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+              <strong>${account.bankName}</strong>
+              ${account.isPrimary ? '<span style="background: rgba(34,197,94,0.12); color: #15803d; padding: 4px 8px; border-radius: 999px; font-size: 0.75rem; font-weight: 700;">Cuenta principal</span>' : ''}
+            </div>
+            <small style="display:block; margin-top:4px; color: var(--text-muted);">${account.accountType} · ${maskAccountNumber(account.accountNumber)}</small>
+            <small style="display:block; margin-top:2px; color: var(--text-muted);">Titular: ${account.holderName}</small>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn-secondary" style="padding:8px 10px;" onclick="event.stopPropagation(); editBankAccount('${account.id}')">Editar</button>
+            <button type="button" class="btn-secondary" style="padding:8px 10px; background: rgba(239,68,68,0.08); color: var(--danger);" onclick="event.stopPropagation(); deleteBankAccount('${account.id}')">Eliminar</button>
+          </div>
+        </label>
+      `).join('');
+
+      const selectedBank = accounts.find(account => account.id === selectedId);
+      const summary = document.getElementById('selectedBankAccountSummary');
+      if (summary && selectedBank) {
+        summary.style.display = 'block';
+        summary.innerHTML = `
+          <strong>Cuenta seleccionada:</strong><br>
+          <span>${selectedBank.bankName} · ${selectedBank.accountType}</span><br>
+          <small>Cuenta: ${maskAccountNumber(selectedBank.accountNumber)} · Titular: ${selectedBank.holderName}</small>
+        `;
+      }
+    }
+
+    function saveBankAccount() {
+      if (!state.user.logged) {
+        navigateTo('login');
+        showToast('Debes iniciar sesión para guardar tus datos bancarios.');
+        return;
+      }
+
+      const holderName = document.getElementById('bankHolderName').value.trim();
+      const documentType = document.getElementById('bankDocumentType').value;
+      const documentNumber = document.getElementById('bankDocumentNumber').value.trim();
+      const bankName = document.getElementById('bankName').value.trim();
+      const accountType = document.getElementById('bankAccountType').value;
+      const accountNumber = document.getElementById('bankAccountNumber').value.trim();
+      const cellPhone = document.getElementById('bankCellPhone').value.trim();
+      const email = document.getElementById('bankEmail').value.trim();
+      const methodType = document.getElementById('bankMethodType').value;
+      const isPrimary = document.getElementById('bankIsPrimary').checked;
+      const accountId = document.getElementById('bankAccountFormId').value;
+
+      if (!holderName || !documentType || !documentNumber || !bankName || !accountType || !accountNumber || !email || !methodType) {
+        showToast('Completa todos los campos para guardar la cuenta bancaria.');
+        return;
+      }
+
+      const account = {
+        id: accountId || `BANK-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
+        userEmail: state.user.email,
+        holderName,
+        documentType,
+        documentNumber,
+        bankName,
+        accountType,
+        accountNumber,
+        cellPhone,
+        email,
+        methodType,
+        isPrimary: false,
+        createdAt: new Date().toLocaleString('es-CO')
+      };
+
+      const accounts = getUserBankAccounts();
+      if (isPrimary || !accounts.length) account.isPrimary = true;
+      else if (accountId) {
+        const existing = accounts.find(item => item.id === accountId);
+        account.isPrimary = existing ? existing.isPrimary : false;
+      }
+      if (isPrimary) {
+        accounts.forEach(item => item.isPrimary = false);
+        account.isPrimary = true;
+      }
+
+      window.scriBankAccounts = window.scriBankAccounts || [];
+      if (accountId) {
+        window.scriBankAccounts = window.scriBankAccounts.filter(item => item.id !== accountId);
+      }
+      window.scriBankAccounts.push(account);
+      localStorage.setItem('scriBankAccounts', JSON.stringify(window.scriBankAccounts));
+      saveState();
+
+      state.checkoutData = state.checkoutData || {};
+      state.checkoutData.bankAccountId = account.id;
+      resetBankAccountForm();
+      renderBankAccounts();
+      renderCheckoutBankSelection();
+      updateCheckout();
+      showToast('Datos bancarios guardados correctamente.');
+    }
+
+    function editBankAccount(accountId) {
+      const account = getUserBankAccounts().find(item => item.id === accountId);
+      if (!account) return;
+      document.getElementById('bankHolderName').value = account.holderName || '';
+      document.getElementById('bankDocumentType').value = account.documentType || '';
+      document.getElementById('bankDocumentNumber').value = account.documentNumber || '';
+      document.getElementById('bankName').value = account.bankName || '';
+      document.getElementById('bankAccountType').value = account.accountType || '';
+      document.getElementById('bankAccountNumber').value = account.accountNumber || '';
+      document.getElementById('bankCellPhone').value = account.cellPhone || '';
+      document.getElementById('bankEmail').value = account.email || '';
+      document.getElementById('bankMethodType').value = account.methodType || '';
+      document.getElementById('bankIsPrimary').checked = !!account.isPrimary;
+      document.getElementById('bankAccountFormId').value = account.id;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showToast('Edita la cuenta y guarda los cambios.');
+    }
+
+    function deleteBankAccount(accountId) {
+      const account = getUserBankAccounts().find(item => item.id === accountId);
+      if (!account) return;
+      const confirmed = confirm('¿Seguro que deseas eliminar esta cuenta bancaria?');
+      if (!confirmed) return;
+      window.scriBankAccounts = window.scriBankAccounts.filter(item => item.id !== accountId);
+      localStorage.setItem('scriBankAccounts', JSON.stringify(window.scriBankAccounts));
+      saveState();
+      if (state.checkoutData?.bankAccountId === accountId) {
+        const nextAccount = getUserBankAccounts()[0];
+        state.checkoutData.bankAccountId = nextAccount ? nextAccount.id : null;
+      }
+      renderBankAccounts();
+      renderCheckoutBankSelection();
+      updateCheckout();
+      showToast('Cuenta bancaria eliminada.');
+    }
+
+    function renderBankAccounts() {
+      const container = document.getElementById('bankAccountsContainer');
+      if (!container) return;
+      if (!state.user.logged) {
+        container.innerHTML = '<div style="padding:30px;background:var(--surface);border-radius:20px;color:var(--text-muted);">Debes iniciar sesión para gestionar tus cuentas bancarias.</div>';
+        return;
+      }
+
+      const accounts = getUserBankAccounts();
+      const panel = `
+        <div class="panel-card" style="margin-bottom: 18px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+            <h3 style="margin: 0;">Registra tus datos bancarios</h3>
+            <button type="button" onclick="resetBankAccountForm()">Agregar cuenta bancaria</button>
+          </div>
+          <div class="form-grid" style="grid-template-columns: repeat(2,minmax(180px,1fr)); margin-top: 18px;">
+            <input id="bankHolderName" type="text" placeholder="Nombre completo del titular" />
+            <select id="bankDocumentType">
+              <option value="">Tipo de documento</option>
+              <option value="CC">Cédula de ciudadanía</option>
+              <option value="CE">Cédula de extranjería</option>
+              <option value="NIT">NIT</option>
+              <option value="PP">Pasaporte</option>
+            </select>
+            <input id="bankDocumentNumber" type="text" placeholder="Número de documento" />
+            <input id="bankName" type="text" placeholder="Banco" />
+            <select id="bankAccountType">
+              <option value="">Tipo de cuenta</option>
+              <option value="Ahorros">Ahorros</option>
+              <option value="Corriente">Corriente</option>
+            </select>
+            <input id="bankAccountNumber" type="text" placeholder="Número de cuenta" />
+            <input id="bankCellPhone" type="tel" placeholder="Número de celular para Nequi o Daviplata" />
+            <input id="bankEmail" type="email" value="${state.user.email || ''}" placeholder="Correo electrónico" readonly />
+            <select id="bankMethodType">
+              <option value="">Selecciona tu método</option>
+              <option value="Cuenta bancaria">Cuenta bancaria</option>
+              <option value="Nequi">Nequi</option>
+              <option value="Daviplata">Daviplata</option>
+              <option value="Otro">Otro</option>
+            </select>
+            <label style="display:flex; align-items:center; gap:8px; min-height:48px;">
+              <input id="bankIsPrimary" type="checkbox" />
+              <span>Usar esta como cuenta principal</span>
+            </label>
+            <input id="bankAccountFormId" type="hidden" />
+          </div>
+          <div style="margin-top: 18px; display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+            <button type="button" onclick="saveBankAccount()">Guardar datos bancarios</button>
+            <button type="button" class="btn-secondary" onclick="resetBankAccountForm()">Limpiar</button>
+          </div>
+        </div>
+        <div class="panel-card">
+          <h3 style="margin-top: 0;">Mis cuentas bancarias</h3>
+          ${accounts.length ? accounts.map(account => `
+            <div style="padding: 16px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); margin-bottom: 14px;">
+              <div style="display:flex; justify-content:space-between; gap:12px; align-items:center; flex-wrap:wrap;">
+                <div>
+                  <strong>${account.bankName}</strong>
+                  <p style="margin: 6px 0; color: var(--text-muted);">${account.accountType} · Cuenta: ${maskAccountNumber(account.accountNumber)}</p>
+                  <p style="margin: 0; color: var(--text-muted);">Titular: ${account.holderName}</p>
+                </div>
+                <div style="text-align:right;">
+                  ${account.isPrimary ? '<span style="display:inline-block; background: rgba(34,197,94,0.12); color: #15803d; padding: 6px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 700; margin-bottom: 8px;">Cuenta principal</span>' : ''}
+                  <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
+                    <button type="button" class="btn-secondary" style="padding:8px 10px;" onclick="editBankAccount('${account.id}')">Editar</button>
+                    <button type="button" class="btn-secondary" style="padding:8px 10px; background: rgba(239,68,68,0.08); color: var(--danger);" onclick="deleteBankAccount('${account.id}')">Eliminar</button>
+                    <button type="button" class="btn-secondary" style="padding:8px 10px;" onclick="setPrimaryBankAccount('${account.id}')">Marcar principal</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `).join('') : '<div style="padding:20px; color: var(--text-muted);">Todavía no registras cuentas bancarias.</div>'}
+        </div>
+      `;
+      container.innerHTML = panel;
+      document.getElementById('bankEmail').value = state.user.email || '';
+    }
+
+    function setPrimaryBankAccount(accountId) {
+      const accounts = getUserBankAccounts();
+      accounts.forEach(account => {
+        account.isPrimary = account.id === accountId;
+      });
+      window.scriBankAccounts = (window.scriBankAccounts || []).map(account => {
+        const match = accounts.find(item => item.id === account.id);
+        return match ? { ...account, isPrimary: match.isPrimary } : account;
+      });
+      localStorage.setItem('scriBankAccounts', JSON.stringify(window.scriBankAccounts));
+      saveState();
+      renderBankAccounts();
+      renderCheckoutBankSelection();
+      updateCheckout();
+      showToast('Cuenta principal actualizada.');
+    }
+
+    function renderOrders() {
+      const history = document.getElementById('orderHistory');
+      history.innerHTML = '';
+      if (!state.user.logged) {
+        history.innerHTML = '<div style="padding:30px;background:var(--surface);border-radius:24px;color:var(--text-muted);">Debes iniciar sesión para ver tu historial de pedidos.</div>';
+        return;
+      }
+      const userEmail = state.user.email;
+      const orders = (data.orders || []).filter(o => o.userEmail === userEmail);
+      if (!orders.length) {
+        history.innerHTML = '<div style="padding:30px;background:var(--surface);border-radius:24px;color:var(--text-muted);">No tienes pedidos registrados todavía.</div>';
+        return;
+      }
+      orders.forEach(order => {
+        const card = document.createElement('div');
+        card.className = 'order-card';
+        const productsList = order.items?.map(it => `${data.products.find(p => p.id === it.id)?.name || it.id} x ${it.quantity}`).join('\n') || order.products.map(id => data.products.find(p => p.id === id)?.name || id).join(', ');
+        card.innerHTML = `
+          <header><h4>Pedido ${order.id}</h4><span class="status-tag status-${order.status.replace(/\s+/g,'').toLowerCase()}">${order.status}</span></header>
+          <p><strong>Fecha:</strong> ${order.date}</p>
+          <p><strong>Total:</strong> ${currency(order.total)}</p>
+          <p><strong>Cliente:</strong> ${order.customer}</p>
+          <p style="white-space:pre-wrap"><strong>Productos:</strong> ${productsList}</p>
+          <p><strong>Dirección:</strong> ${order.address?.full || order.address || 'No registrada'}</p>
+          <div style="display:flex;gap:10px;margin-top:12px;">
+            <button style="padding:10px 14px;border:none;border-radius:12px;background:var(--primary);color:white;" onclick="showOrderDetail('${order.id}')">Ver pedido</button>
+            <button style="padding:10px 14px;border:none;border-radius:12px;background:#25D366;color:white;" onclick="sendOrderWhatsApp('${order.id}')">Enviar por WhatsApp</button>
+          </div>
+        `;
+        history.appendChild(card);
+      });
+    }
+
+    function showOrderDetail(id) {
+      const order = data.orders.find(item => item.id === id);
+      if (!order) return;
+      showToast(`Pedido ${id}: ${order.status}. Total ${currency(order.total)}.`);
+    }
+
+    function renderFavorites() {
+      const container = document.getElementById('favoriteGrid');
+      container.innerHTML = '';
+      const favorites = state.favorites.map(id => data.products.find(product => product.id === id)).filter(Boolean);
+      if (!favorites.length) {
+        container.innerHTML = '<div style="grid-column:1/-1;padding:30px;border-radius:24px;background:var(--surface);color:var(--text-muted);">No tienes productos guardados aún. Agrega favoritos desde el catálogo.</div>';
+        return;
+      }
+      favorites.forEach(product => {
+        const card = document.createElement('article');
+        card.className = 'favorite-card';
+        card.innerHTML = `
+          <img src="${product.images[0]}" alt="${product.name}" />
+          <div><strong>${product.name}</strong><p>${currency(product.price)}</p><small>${product.stock === 0 ? 'Agotado' : product.stock < 10 ? 'Últimas unidades' : 'Disponible'}</small></div>
+          <button class="fav-add" onclick="addToCart('${product.id}',1)">Agregar al carrito</button>
+          <button class="fav-remove" onclick="toggleFavorite('${product.id}')">Eliminar</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderAdmin() {
+      document.getElementById('adminSales').textContent = currency(data.orders.reduce((sum, order) => sum + order.total, 0));
+      document.getElementById('adminOrders').textContent = data.orders.length;
+      document.getElementById('adminCustomers').textContent = 45;
+      document.getElementById('adminOutOfStock').textContent = data.products.filter(product => product.stock === 0).length;
+
+      const productTable = document.getElementById('adminProductTable');
+      productTable.innerHTML = '';
+      data.products.slice(0, 8).forEach(product => {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${product.name}</td><td>${product.category}</td><td>${currency(product.price)}</td><td>${product.stock}</td><td>${product.stock === 0 ? 'Agotado' : product.stock < 10 ? 'Stock bajo' : 'Disponible'}</td>`;
+        productTable.appendChild(row);
+      });
+
+      const orderTable = document.getElementById('adminOrderTable');
+      orderTable.innerHTML = '';
+      data.orders.forEach(order => {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${order.id}</td><td>${order.customer}</td><td>${currency(order.total)}</td><td>${order.status}</td><td>${order.date}</td>`;
+        orderTable.appendChild(row);
+      });
+      
+      // Renderizar pagos pendientes
+      renderAdminPayments();
+    }
+
+    function renderAdminPayments() {
+      const paymentsContainer = document.getElementById('adminPaymentTable');
+      if (!paymentsContainer) return; // Si no existe el contenedor, salir
+      
+      window.scriPaymentRequests = window.scriPaymentRequests || [];
+      paymentsContainer.innerHTML = '';
+      
+      if (!window.scriPaymentRequests.length) {
+        paymentsContainer.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: var(--text-muted);">No hay solicitudes de pago pendientes.</td></tr>';
+        return;
+      }
+      
+      window.scriPaymentRequests.forEach(payment => {
+        const row = document.createElement('tr');
+        const statusColor = payment.status === 'Pendiente de verificación' ? '#f59e0b' : 
+                           payment.status === 'Pago aprobado' ? '#16a34a' : '#ef4444';
+        row.innerHTML = `
+          <td>${payment.id}</td>
+          <td>${payment.userName}</td>
+          <td>${currency(payment.amount)}</td>
+          <td><span style="background: ${statusColor}20; color: ${statusColor}; padding: 6px 10px; border-radius: 6px; font-weight: 600; font-size: 0.85rem;">${payment.status}</span></td>
+          <td>${payment.createdAt}</td>
+          <td style="text-align: center;">
+            ${payment.status === 'Pendiente de verificación' ? `
+              <button onclick="approvePayment('${payment.id}')" style="padding: 6px 10px; border: none; border-radius: 6px; background: #16a34a; color: white; font-weight: 600; font-size: 0.8rem; margin-right: 4px; cursor: pointer;">Aprobar</button>
+              <button onclick="rejectPayment('${payment.id}')" style="padding: 6px 10px; border: none; border-radius: 6px; background: #ef4444; color: white; font-weight: 600; font-size: 0.8rem; cursor: pointer;">Rechazar</button>
+            ` : `
+              <small>${payment.status === 'Pago aprobado' ? '✅ Aprobado' : '❌ Rechazado'}</small>
+            `}
+          </td>
+        `;
+        paymentsContainer.appendChild(row);
+      });
+    }
+
+    function approvePayment(paymentId) {
+      window.scriPaymentRequests = window.scriPaymentRequests || [];
+      const payment = window.scriPaymentRequests.find(p => p.id === paymentId);
+      if (!payment) return;
+      
+      payment.status = 'Pago aprobado';
+      payment.approvedAt = new Date().toLocaleString('es-CO');
+      localStorage.setItem('scriPaymentRequests', JSON.stringify(window.scriPaymentRequests));
+      
+      // Enviar correo de aprobación
+      sendPaymentStatusEmail(payment, 'aprobado');
+      
+      showToast(`✅ Pago ${paymentId} aprobado.`);
+      renderAdminPayments();
+    }
+
+    function rejectPayment(paymentId) {
+      const reason = prompt('Ingresa el motivo del rechazo:');
+      if (!reason) return;
+      
+      window.scriPaymentRequests = window.scriPaymentRequests || [];
+      const payment = window.scriPaymentRequests.find(p => p.id === paymentId);
+      if (!payment) return;
+      
+      payment.status = 'Pago rechazado';
+      payment.rejectedAt = new Date().toLocaleString('es-CO');
+      payment.rejectionReason = reason;
+      localStorage.setItem('scriPaymentRequests', JSON.stringify(window.scriPaymentRequests));
+      
+      // Enviar correo de rechazo
+      sendPaymentStatusEmail(payment, 'rechazado', reason);
+      
+      showToast(`❌ Pago ${paymentId} rechazado.`);
+      renderAdminPayments();
+    }
+
+    function sendPaymentStatusEmail(payment, status, reason = '') {
+      if (!emailjsConfigured) {
+        console.warn('⚠️ EmailJS no está configurado. No se pudo enviar correo de estado.');
+        return;
+      }
+
+      let statusMessage = '';
+      if (status === 'aprobado') {
+        statusMessage = `
+Tu pago de $${payment.amount.toLocaleString('es-CO')} ha sido APROBADO ✅
+
+El monto ha sido procesado correctamente en nuestro sistema.
+Tu pedido será preparado y enviado en breve.
+        `;
+      } else {
+        statusMessage = `
+Tu pago de $${payment.amount.toLocaleString('es-CO')} ha sido RECHAZADO ❌
+
+Motivo: ${reason || 'No especificado'}
+
+Por favor, intenta nuevamente o contacta con nuestro equipo de soporte.
+Teléfono: 317 443 7303
+WhatsApp: https://wa.me/573174437303
+        `;
+      }
+
+      const templateParams = {
+        to_email: payment.userEmail,
+        from_name: 'ScriPapelería Admin',
+        subject: `Estado de tu pago - ${payment.id}`,
+        message: `
+Hola ${payment.userName},
+
+${statusMessage}
+
+DATOS DE TU SOLICITUD:
+—————————————————
+Código de referencia: ${payment.id}
+Monto: $${payment.amount.toLocaleString('es-CO')}
+Método: ${payment.method === 'nequi' ? 'Nequi' : 'Bancolombia'}
+Estado anterior: Pendiente de verificación
+Estado actual: ${status === 'aprobado' ? 'Pago aprobado' : 'Pago rechazado'}
+Actualizado: ${new Date().toLocaleString('es-CO')}
+
+¡Gracias por tu confianza en ScriPapelería!
+        `,
+        reply_to: payment.userEmail
+      };
+
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+        .then(response => console.log('✅ Correo de estado enviado:', response.status))
+        .catch(error => console.error('❌ Error al enviar correo:', error));
+    }
+
+    function updateCheckout() {
+      if (!state.user.logged) {
+        navigateTo('login');
+        showToast('⚠️ Debes iniciar sesión para continuar con el pago.');
+        return;
+      }
+
+      if (state.user.logged && document.getElementById('bankEmail')) {
+        document.getElementById('bankEmail').value = state.user.email || '';
+      }
+
+      if (state.user.logged && state.checkoutStep === 1) {
+        const nameField = document.getElementById('checkoutName');
+        const lastNameField = document.getElementById('checkoutLastName');
+        const emailField = document.getElementById('checkoutEmail');
+        const phoneField = document.getElementById('checkoutPhone');
+        if (nameField && !nameField.value) nameField.value = state.user.name || '';
+        if (lastNameField && !lastNameField.value) lastNameField.value = state.user.lastName || '';
+        if (emailField && !emailField.value) emailField.value = state.user.email || '';
+        if (phoneField && !phoneField.value) phoneField.value = state.user.phone || '';
+      }
+
+      const steps = [1,2,3,4];
+      steps.forEach(step => {
+        const node = document.getElementById(`checkoutStep${step}`);
+        if (node) node.classList.toggle('hidden', step !== state.checkoutStep);
+      });
+      steps.forEach(step => {
+        const node = document.getElementById(`stepIndicator${step}`);
+        if (node) node.classList.toggle('active', step === state.checkoutStep);
+      });
+
+      const subtotal = state.cart.reduce((sum, item) => sum + (data.products.find(p => p.id === item.id)?.price || 0) * item.quantity, 0);
+      const discount = state.cart.reduce((sum, item) => {
+        const product = data.products.find(p => p.id === item.id);
+        return sum + (product?.oldPrice ? (product.oldPrice - product.price) * item.quantity : 0);
+      }, 0);
+      const shipping = state.cart.length ? 12000 : 0;
+      const total = subtotal - discount + shipping;
+
+      if (document.getElementById('confirmProductCount')) {
+        document.getElementById('confirmProductCount').textContent = `${state.cart.length} productos`;
+        document.getElementById('confirmSubtotal').textContent = currency(subtotal - discount);
+        document.getElementById('confirmTotal').textContent = currency(total);
+      }
+      if (document.getElementById('paymentAmount')) {
+        document.getElementById('paymentAmount').textContent = currency(total);
+      }
+
+      if (document.getElementById('checkoutSummaryProducts')) {
+        document.getElementById('checkoutSummaryProducts').innerHTML = state.cart.map(item => {
+          const product = data.products.find(p => p.id === item.id);
+          const lineTotal = (product?.price || 0) * item.quantity;
+          return `- ${product?.name || item.id} × ${item.quantity} — ${currency(lineTotal)}`;
+        }).join('<br>') || 'No hay productos en el carrito.';
+      }
+      if (document.getElementById('checkoutSummaryTotal')) {
+        document.getElementById('checkoutSummaryTotal').textContent = currency(total);
+      }
+      if (document.getElementById('checkoutSummaryMethod')) {
+        const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked');
+        document.getElementById('checkoutSummaryMethod').textContent = selectedPayment ? selectedPayment.value === 'nequi' ? 'Nequi' : 'Bancolombia' : (state.checkoutData?.payment || 'No especificado');
+      }
+      if (document.getElementById('checkoutSummaryAccount')) {
+        const selectedAccount = getUserBankAccounts().find(account => account.id === state.checkoutData?.bankAccountId) || getUserBankAccounts().find(account => account.isPrimary) || getUserBankAccounts()[0];
+        document.getElementById('checkoutSummaryAccount').textContent = selectedAccount ? `${selectedAccount.bankName} · ${maskAccountNumber(selectedAccount.accountNumber)} · ${selectedAccount.holderName}` : 'No seleccionada';
+      }
+      renderCheckoutBankSelection();
+    }
+
+    function goCheckoutStep(step) {
+      if (!state.user.logged) {
+        showToast('⚠️ Debes iniciar sesión para continuar.');
+        navigateTo('login');
+        return;
+      }
+
+      if (step === 2) {
+        const name = document.getElementById('checkoutName').value.trim();
+        const last = document.getElementById('checkoutLastName').value.trim();
+        const email = document.getElementById('checkoutEmail').value.trim();
+        const phone = document.getElementById('checkoutPhone').value.trim();
+        if (!name || !email || !phone) { showToast('Completa nombre, correo y teléfono.'); return; }
+        state.checkoutData = state.checkoutData || {};
+        state.checkoutData.customer = { name, last, email, phone };
+        const users = window.scriUsers || [];
+        const u = users.find(x => x.email === state.user.email);
+        if (u) { u.name = name; u.lastName = last; u.phone = phone; localStorage.setItem('scriUsers', JSON.stringify(users)); }
+      }
+      if (step === 3) {
+        const dept = document.getElementById('checkoutDepartment')?.value;
+        const city = document.getElementById('checkoutCity')?.value.trim();
+        const addr = document.getElementById('checkoutAddress')?.value.trim();
+        const addr2 = document.getElementById('checkoutAddress2')?.value.trim();
+        if (dept || city || addr) {
+          if (!dept || !city || !addr) { showToast('Completa la dirección: departamento, ciudad y dirección.'); return; }
+          state.checkoutData = state.checkoutData || {};
+          state.checkoutData.address = { department: dept, city, full: `${addr}${addr2 ? ' - ' + addr2 : ''}` };
+        }
+      }
+      if (step === 4) {
+        const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked');
+        const selectedBank = getUserBankAccounts().find(account => account.id === state.checkoutData?.bankAccountId) || getUserBankAccounts().find(account => account.isPrimary) || getUserBankAccounts()[0];
+        if (!selectedPayment) {
+          document.getElementById('paymentMethodError').style.display = 'block';
+          showToast('Selecciona un método de pago.');
+          return;
+        }
+        if (!selectedBank) {
+          showToast('Registra y selecciona una cuenta bancaria antes de continuar.');
+          return;
+        }
+        state.checkoutData = state.checkoutData || {};
+        state.checkoutData.payment = selectedPayment.value;
+        state.checkoutData.bankAccountId = selectedBank.id;
+        document.getElementById('paymentMethodError').style.display = 'none';
+      }
+      state.checkoutStep = step;
+      updateCheckout();
+    }
+
+    function completeOrder() {
+      if (!state.cart.length) { showToast('Tu carrito está vacío.'); return; }
+      state.checkoutData = state.checkoutData || {};
+      const customer = state.checkoutData.customer || (state.user.logged ? { name: state.user.name, last: state.user.lastName, email: state.user.email, phone: state.user.phone } : null);
+      const address = state.checkoutData.address || null;
+      const payment = state.checkoutData.payment || 'No especificado';
+      if (!customer || !customer.name || !customer.email) { showToast('Completa la información del cliente antes de confirmar.'); return; }
+      const items = state.cart.map(item => ({ id: item.id, quantity: item.quantity, price: data.products.find(p => p.id === item.id)?.price || 0 }));
+      const subtotal = items.reduce((s, it) => s + it.price * it.quantity, 0);
+      const shipping = state.cart.length ? 12000 : 0;
+      const newOrder = {
+        id: `SCP-${Math.floor(1000 + Math.random() * 9000)}`,
+        date: new Date().toLocaleString('es-CO'),
+        total: subtotal + shipping,
+        status: 'Pedido recibido',
+        items,
+        customer: `${customer.name} ${customer.last || ''}`.trim(),
+        userEmail: customer.email,
+        phone: customer.phone,
+        address,
+        payment
+      };
+      data.orders.unshift(newOrder);
+      // Asociar pedido al usuario
+      if (state.user.logged) {
+        window.scriUsers = window.scriUsers || [];
+        const u = window.scriUsers.find(x => x.email === state.user.email);
+        if (u) { u.orders = u.orders || []; u.orders.push(newOrder.id); localStorage.setItem('scriUsers', JSON.stringify(window.scriUsers)); }
+      }
+      state.cart = [];
+      state.checkoutData = {};
+      saveState();
+      renderCounts();
+      renderCart();
+      renderAdmin();
+      showToast('¡Gracias por comprar en ScriPapelería! Tu pedido fue confirmado.');
+      navigateTo('orders');
+    }
+
+    // =================== NUEVAS FUNCIONES DE PAGO ===================
+    
+    function selectPaymentMethod(method) {
+      // Actualizar radio button
+      document.querySelector(`input[value="${method}"]`).checked = true;
+      
+      // Ocultar todos los datos de pago
+      document.getElementById('nequiData').style.display = 'none';
+      document.getElementById('bancolombiaData').style.display = 'none';
+      
+      // Mostrar datos del método seleccionado
+      if (method === 'nequi') {
+        document.getElementById('nequiData').style.display = 'block';
+        document.getElementById('selectedMethodDisplay').textContent = '📱 Nequi - Número: 315 3269410';
+      } else if (method === 'bancolombia') {
+        document.getElementById('bancolombiaData').style.display = 'block';
+        document.getElementById('selectedMethodDisplay').textContent = '🏦 Bancolombia - Cuenta de ahorros: 84850645671';
+      }
+    }
+
+    function copyPaymentData(data) {
+      navigator.clipboard.writeText(data).then(() => {
+        showToast('✅ Datos copiados al portapapeles.');
+      }).catch(() => {
+        showToast('❌ No se pudo copiar. Intenta seleccionar y copiar manualmente.');
+      });
+    }
+
+    function buildWhatsAppOrderMessage({ customer, email, items, total, paymentMethod, reference, address, date }) {
+      const productLines = items.map(item => {
+        const product = data.products.find(p => p.id === item.id);
+        const unitPrice = Number(item.price || product?.price || 0);
+        const subtotal = unitPrice * item.quantity;
+        return `- ${product?.name || item.id} × ${item.quantity} — $${subtotal.toLocaleString('es-CO')}`;
+      }).join('\n');
+
+      const addressText = address && (address.full || address.city || address.department)
+        ? (address.full || `${address.city || ''} ${address.department || ''}`.trim())
+        : 'No registrada';
+
+      const methodLabel = paymentMethod === 'nequi' ? 'Nequi' : paymentMethod === 'daviplata' ? 'Daviplata' : paymentMethod === 'bancolombia' ? 'Bancolombia' : 'Transferencia / Pago';
+
+      return [
+        'NUEVO PEDIDO – ScriPapeleria',
+        '',
+        `Cliente: ${customer}`,
+        `Correo: ${email}`,
+        '',
+        'Productos:',
+        productLines,
+        '',
+        `Total: $${Number(total).toLocaleString('es-CO')}`,
+        '',
+        `Método de pago: ${methodLabel}`,
+        `Referencia: ${reference}`,
+        `Fecha y hora: ${date}`,
+        `Dirección: ${addressText}`
+      ].join('\n');
+    }
+
+    function openWhatsAppOrderChat(orderData) {
+      const whatsappNumber = '573174437303';
+      const message = buildWhatsAppOrderMessage(orderData);
+      const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+      window.open(url, '_blank');
+      return url;
+    }
+
+    function completePaymentRequest() {
+      // Validar que el usuario está logueado
+      if (!state.user.logged) {
+        showToast('⚠️ Debes iniciar sesión para registrar el pago.');
+        navigateTo('login');
+        return;
+      }
+
+      // Validar que se confirmó el pago
+      const checkbox = document.getElementById('paymentConfirmCheckbox');
+      if (!checkbox.checked) {
+        showToast('⚠️ Debes confirmar que realizaste la transferencia.');
+        return;
+      }
+
+      // Validar que hay items en el carrito
+      if (!state.cart.length) {
+        showToast('Tu carrito está vacío.');
+        return;
+      }
+
+      state.checkoutData = state.checkoutData || {};
+      const customer = state.checkoutData.customer || { name: state.user.name, last: state.user.lastName, email: state.user.email, phone: state.user.phone };
+      const address = state.checkoutData.address;
+      const paymentMethod = state.checkoutData.payment || 'nequi';
+
+      if (!customer.email) {
+        showToast('Correo electrónico no disponible.');
+        return;
+      }
+
+      // Calcular monto
+      const items = state.cart.map(item => ({ id: item.id, quantity: item.quantity, price: data.products.find(p => p.id === item.id)?.price || 0 }));
+      const subtotal = items.reduce((s, it) => s + it.price * it.quantity, 0);
+      const shipping = state.cart.length ? 12000 : 0;
+      const total = subtotal + shipping;
+      const reference = `PED-${Date.now()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+      const orderDate = new Date().toLocaleString('es-CO');
+
+      // Generar solicitud de pago existente
+      window.scriPaymentRequests = window.scriPaymentRequests || [];
+      const paymentRequest = {
+        id: `PAY-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+        userEmail: customer.email,
+        userName: `${customer.name} ${customer.last || ''}`.trim(),
+        phone: customer.phone,
+        amount: total,
+        method: paymentMethod,
+        items: items,
+        address: address,
+        status: 'Pendiente de verificación',
+        createdAt: orderDate,
+        approvedAt: null,
+        rejectedAt: null,
+        rejectionReason: ''
+      };
+
+      window.scriPaymentRequests.push(paymentRequest);
+      localStorage.setItem('scriPaymentRequests', JSON.stringify(window.scriPaymentRequests));
+
+      // Enviar confirmación por correo
+      sendPaymentConfirmationEmail(paymentRequest);
+
+      const orderPayload = {
+        customer: `${customer.name} ${customer.last || ''}`.trim(),
+        email: customer.email,
+        items,
+        total,
+        paymentMethod,
+        reference,
+        address,
+        date: orderDate
+      };
+
+      // Abrir WhatsApp con el pedido ya preparado
+      openWhatsAppOrderChat(orderPayload);
+
+      // Limpiar carrito y datos de checkout
+      state.cart = [];
+      state.checkoutData = {};
+      saveState();
+      renderCounts();
+
+      showToast('✅ Tu pedido está listo para enviarse por WhatsApp.');
+      setTimeout(() => navigateTo('orders'), 1200);
+    }
+
+    function sendPaymentConfirmationEmail(paymentRequest) {
+      // Verificar que EmailJS está configurado
+      if (!emailjsConfigured) {
+        console.warn('⚠️ EmailJS no está configurado. No se pudo enviar correo de confirmación.');
+        return;
+      }
+
+      const methodDisplay = paymentRequest.method === 'nequi' 
+        ? '📱 Nequi: 315 3269410'
+        : '🏦 Bancolombia (Ahorro): 84850645671';
+
+      // Preparar datos del correo
+      const templateParams = {
+        to_email: paymentRequest.userEmail,
+        from_name: paymentRequest.userName,
+        subject: `Solicitud de pago registrada - ${paymentRequest.id}`,
+        message: `
+Hola ${paymentRequest.userName},
+
+Tu solicitud de pago ha sido registrada exitosamente.
+
+DATOS DE TU SOLICITUD:
+—————————————————
+Código de referencia: ${paymentRequest.id}
+Monto: $${paymentRequest.amount.toLocaleString('es-CO')}
+Método de pago: ${methodDisplay}
+Estado: ${paymentRequest.status}
+Fecha: ${paymentRequest.createdAt}
+
+PRÓXIMOS PASOS:
+1. Verifica que realizaste la transferencia con los datos anteriores
+2. Nuestro equipo validará tu pago en las próximas 24-48 horas
+3. Recibirás un correo cuando tu pago sea aprobado
+
+DETALLES DE CONTACTO:
+Teléfono: ${paymentRequest.phone}
+Correo: ${paymentRequest.userEmail}
+
+Si tienes dudas, contáctanos por WhatsApp: 317 443 7303
+
+¡Gracias por comprar en ScriPapelería!
+        `,
+        reply_to: paymentRequest.userEmail
+      };
+
+      // Enviar con EmailJS
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+        .then(function(response) {
+          console.log('✅ Correo de confirmación enviado:', response.status);
+        })
+        .catch(function(error) {
+          console.error('❌ Error al enviar correo:', error);
+        });
+    }
+    
+    // ================================================================
+
+    function sendOrderWhatsApp(orderId) {
+      const order = data.orders.find(o => o.id === orderId);
+      if (!order) { showToast('No se encontró el pedido para enviar por WhatsApp.'); return; }
+
+      const orderData = {
+        customer: order.customer || 'Cliente',
+        email: order.userEmail || state.user.email || 'No registrado',
+        items: order.items || [],
+        total: order.total || 0,
+        paymentMethod: order.payment || 'No especificado',
+        reference: order.id || 'Sin referencia',
+        address: order.address || { full: 'No registrada' },
+        date: order.date || new Date().toLocaleString('es-CO')
+      };
+
+      openWhatsAppOrderChat(orderData);
+      showToast('Se abrió WhatsApp con el pedido preparado.');
+    }
+
+    function trackOrder() {
+      const id = document.getElementById('trackOrderId').value.trim();
+      const result = document.getElementById('trackResult');
+      if (!id) { result.innerHTML = '<p style="color:var(--danger);">Ingresa un número de pedido válido.</p>'; return; }
+      const order = data.orders.find(item => item.id.toLowerCase() === id.toLowerCase());
+      if (!order) {
+        result.innerHTML = '<p style="color:var(--text-muted);">No se encontró ningún pedido con ese número.</p>';
+        return;
+      }
+      result.innerHTML = `<p><strong>Pedido:</strong> ${order.id}</p><p><strong>Estado:</strong> ${order.status}</p><p><strong>Total:</strong> ${currency(order.total)}</p>`;
+    }
+
+    function sendMessage() {
+      const name = document.getElementById('contactName').value.trim();
+      const email = document.getElementById('contactEmail').value.trim();
+      const subject = document.getElementById('contactSubject').value.trim();
+      const message = document.getElementById('contactMessage').value.trim();
+      const sendButton = event.target;
+      
+      // Validar que todos los campos estén completos
+      if (!name || !email || !subject || !message) { 
+        showToast('⚠️ Completa todos los campos del formulario.');
+        return; 
+      }
+      
+      // Validar formato de correo
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showToast('⚠️ Ingresa un correo electrónico válido.');
+        return;
+      }
+      
+      // Validar que EmailJS esté configurado
+      if (!emailjsConfigured) {
+        showToast('❌ El sistema de correos no está disponible. Por favor, intenta más tarde.');
+        console.error('EmailJS no está configurado. Falta: SERVICE_ID, TEMPLATE_ID o PUBLIC_KEY');
+        return;
+      }
+      
+      // Guardar mensaje localmente como backup
+      const messages = JSON.parse(localStorage.getItem('scriMessages') || '[]');
+      messages.unshift({ 
+        id: `MSG-${Date.now()}`, 
+        date: new Date().toLocaleString('es-CO'), 
+        name, 
+        email, 
+        subject, 
+        message,
+        sent: false
+      });
+      localStorage.setItem('scriMessages', JSON.stringify(messages));
+      
+      // Desabilitar el botón para evitar múltiples envíos
+      sendButton.disabled = true;
+      const originalText = sendButton.textContent;
+      sendButton.textContent = 'Enviando...';
+      
+      // Mostrar indicador de carga
+      showToast('📧 Enviando tu mensaje...');
+      
+      // Preparar parámetros para EmailJS
+      // IMPORTANTE: Estos nombres deben coincidir EXACTAMENTE con las variables de la plantilla
+      const templateParams = {
+        to_email: EMAILJS_TO_EMAIL,
+        from_name: name,
+        from_email: email,
+        subject: subject,
+        message: message,
+        reply_to: email
+      };
+      
+      // Enviar correo con EmailJS
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+        .then(function(response) {
+          console.log('✅ Correo enviado correctamente. Status:', response.status);
+          
+          // Marcar como enviado en el almacenamiento
+          messages[0].sent = true;
+          localStorage.setItem('scriMessages', JSON.stringify(messages));
+          
+          // Mostrar éxito y limpiar formulario
+          showToast('✅ ¡Mensaje enviado correctamente! Nos pondremos en contacto contigo pronto.');
+          document.getElementById('contactName').value = '';
+          document.getElementById('contactEmail').value = '';
+          document.getElementById('contactSubject').value = '';
+          document.getElementById('contactMessage').value = '';
+          
+          // Reabilitar botón
+          sendButton.disabled = false;
+          sendButton.textContent = originalText;
+        }, function(error) {
+          console.error('❌ Error al enviar correo:', error);
+          const isStrictModeError = error?.status === 403 && String(error?.text || '').includes('Private Key');
+          showToast(
+            isStrictModeError
+              ? '⚠️ EmailJS está en modo estricto. Activa Account > API Keys y desactiva "Strict mode" o usa un backend con clave privada.'
+              : '❌ No pudimos enviar el mensaje. Por favor, inténtalo nuevamente.'
+          );
+          
+          // Reabilitar botón
+          sendButton.disabled = false;
+          sendButton.textContent = originalText;
+        });
+    }
+
+    function showToast(text) {
+      const toast = document.getElementById('toastMessage');
+      document.getElementById('toastText').textContent = text;
+      toast.classList.add('show');
+      clearTimeout(window.toastTimeout);
+      window.toastTimeout = setTimeout(() => toast.classList.remove('show'), 3200);
+    }
+
+    init();
+  </script>
+</body>
+</html>
